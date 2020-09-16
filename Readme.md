@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Andrey Karpilovich](https://up.htmlacademy.ru/javascript/21/user/1425325).
-* Наставник: `Неизвестно`.
+* Наставник: [Леонид Дугенец](https://htmlacademy.ru/profile/laokree).
 
 ---
 
