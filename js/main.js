@@ -4,16 +4,16 @@ const map = document.querySelector(`.map`);
 const fragment = document.createDocumentFragment();
 const pinsWrapper = map.querySelector(`.map__pins`);
 
-const GET_AVATAR_URL = function (number) {
+const getAvatarUrl = function (number) {
   return `img/avatars/user0${number}.png`;
 };
 // const AVATAR_NUMBER = {
 //   min: 1,
 //   max: 8
 // };
-const GET_ADDRESS = function (x, y) {
+const getAddress = function (x, y) {
   return `${x}, ${y}`;
-}
+};
 const PRICE = {
   min: 50,
   max: 150
@@ -26,11 +26,11 @@ const CHECKOUTS = [`12:00`, `13:00`, `14:00`];
 const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
 const PHOTOS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
 const LOCATION = {
-  x:{
+  x: {
     min: 0,
     max: map.getBoundingClientRect().right
   },
-  y:{
+  y: {
     min: 130,
     max: 630
   },
@@ -38,7 +38,7 @@ const LOCATION = {
 const PIN = {
   x: 25,
   y: 70
-}
+};
 const PINS_COUNT = 8;
 
 const getRandomFromArray = function (array) {
@@ -55,7 +55,7 @@ const shuffleArray = function (array) {
   return result;
 };
 const getRandom = function (min, max) {
-  return Math.floor(min + Math.random() * (max + 1 - min))
+  return Math.floor(min + Math.random() * (max + 1 - min));
 };
 const showMap = function () {
   map.classList.remove(`map--faded`);
@@ -77,7 +77,7 @@ const getPin = function (number) {
   pinTemplate.style.top = `${pinData.location.y - PIN.y}px`;
 
   return pinTemplate;
-}
+};
 
 const getPinData = function (number) {
   const x = getRandom(LOCATION.x.min, LOCATION.x.max);
@@ -87,27 +87,27 @@ const getPinData = function (number) {
 
   return {
     author: {
-        // avatar: GET_AVATAR_URL(getRandom(AVATAR_NUMBER.min, AVATAR_NUMBER.max))
-        avatar: GET_AVATAR_URL(number)
+      // avatar: getAvatarUrl(getRandom(AVATAR_NUMBER.min, AVATAR_NUMBER.max))
+      avatar: getAvatarUrl(number)
     },
     offer: {
-        title: '',
-        address: GET_ADDRESS(x, y),
-        price: getRandom(PRICE.min, PRICE.max),
-        type: getRandomFromArray(TYPES),
-        rooms: getRandomFromArray(ROOMS),
-        guests: getRandomFromArray(GUESTS),
-        checkin: getRandomFromArray(CHECKINS),
-        checkout: getRandomFromArray(CHECKOUTS),
-        features,
-        description: '',
-        photos
+      title: ``,
+      address: getAddress(x, y),
+      price: getRandom(PRICE.min, PRICE.max),
+      type: getRandomFromArray(TYPES),
+      rooms: getRandomFromArray(ROOMS),
+      guests: getRandomFromArray(GUESTS),
+      checkin: getRandomFromArray(CHECKINS),
+      checkout: getRandomFromArray(CHECKOUTS),
+      features,
+      description: ``,
+      photos
     },
     location: {
       x,
       y
     }
-  }
-}
+  };
+};
 showMap();
 renderPins();
