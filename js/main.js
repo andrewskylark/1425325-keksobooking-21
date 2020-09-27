@@ -36,7 +36,7 @@ const LOCATION = {
   },
 };
 const PIN = {
-  x: 25,
+  x: 50,
   y: 70
 };
 const PINS_COUNT = 8;
