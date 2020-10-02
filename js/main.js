@@ -36,6 +36,10 @@ const PIN = {
   x: 50,
   y: 70
 };
+const PIN_MAIN = {
+  x: 65,
+  y: 87
+};
 const PINS_COUNT = 8;
 
 const getRandomFromArray = function (array) {
@@ -106,8 +110,6 @@ const renderPins = function () {
   }
   pinsWrapper.append(fragment);
 };
-showMap();
-renderPins();
 
 const getCardType = function (object) {
   switch (object.offer.type) {
@@ -164,7 +166,96 @@ const fillCard = function (number) {
   return cardTemplate;
 };
 
-pinsWrapper.addEventListener(`click`, function () {
-  const filtersContainer = map.querySelector(`.map__filters-container`);
-  map.insertBefore(fillCard(1), filtersContainer);
+// pinsWrapper.addEventListener(`click`, function () {
+//   const filtersContainer = map.querySelector(`.map__filters-container`);
+//   map.insertBefore(fillCard(1), filtersContainer);
+// });
+
+// const notice = document.querySelector(`.notice`);
+const mapFilters = map.querySelector(`.map__filters`);
+const selectRooms = mapFilters.querySelector(`#housing-rooms`);
+const selectGuests = mapFilters.querySelector(`#housing-guests`);
+const adForm = document.querySelector(`.ad-form`);
+const addressInput = adForm.querySelector(`#address`);
+const adInputs = adForm.querySelectorAll(`fieldset`);
+const mainPin = pinsWrapper.querySelector(`.map__pin--main`);
+
+const enableForm = () => {
+  adForm.classList.remove(`ad-form--disabled`);
+};
+const disableFilters = () => {
+  mapFilters.classList.add(`map__filters--disabled`);
+};
+const enableFilters = () => {
+  mapFilters.classList.remove(`map__filters--disabled`);
+};
+const disableInputs = () => {
+  for (let i = 0; i < adInputs.length; i++) {
+    adInputs[i].disabled = true;
+  }
+};
+const enableInputs = () => {
+  for (let i = 0; i < adInputs.length; i++) {
+    adInputs[i].disabled = false;
+  }
+};
+const fillFormAddress = (elem, pinX, pinY) => {
+  addressInput.value = getAddress(Math.floor(getCoords(elem).x + pinX / 2), (Math.floor(getCoords(elem).y + pinY)));
+};
+const getCoords = (elem) => {
+  let box = elem.getBoundingClientRect();
+
+  return {
+    x: box.left + pageXOffset,
+    y: box.top + pageYOffset
+  };
+};
+// по умолчанию страница задизэйблена, и адрес главного пина прописан
+disableInputs();
+disableFilters();
+fillFormAddress(mainPin, PIN_MAIN.x, PIN_MAIN.x);
+
+const onMainPinMouseButton = (evt) => {
+  if (typeof evt === `object`) {
+    switch (evt.mainPin) {
+      case 0:
+        console.log(`у меня тачпад, левый клик не срабатывает`);
+        break;
+      default:
+        activateSite();
+    }
+  }
+};
+const onMainPinEnterPress = (evt) => {
+  if (evt.keyCode === 13) {
+    activateSite();
+    delete evt.keyCode;
+  }
+};
+// действия при активации страницы при нажатии на главный пин
+const activateSite = () => {
+  showMap();
+  enableInputs();
+  enableForm();
+  enableFilters();
+  renderPins();
+  fillFormAddress(mainPin, PIN_MAIN.x, PIN_MAIN.y);
+  mainPin.removeEventListener(`keydown`, onMainPinEnterPress);
+  mainPin.removeEventListener(`mousedown`, onMainPinMouseButton);
+};
+mainPin.addEventListener(`mousedown`, onMainPinMouseButton);
+mainPin.addEventListener(`keydown`, onMainPinEnterPress);
+// связал селекты гостпй и комнат,пока без 3 гостей и 100 комнат
+mapFilters.addEventListener(`change`, () => {
+  if (selectRooms.value === `1`) {
+    selectGuests.value = `1`;
+  } else if (selectRooms.value === `2`) {
+    selectGuests.querySelector(`[value="2"]`).selected = true;
+    selectGuests.querySelector(`[value="0"]`).disabled = true;
+    selectGuests.querySelector(`[value="any"]`).disabled = true;
+  } else if (selectRooms.value === `3`) {
+    selectGuests.querySelector(`[value="3"]`).selected = true;
+    selectGuests.querySelector(`[value="0"]`).disabled = true;
+    selectGuests.querySelector(`[value="any"]`).disabled = true;
+  }
 });
