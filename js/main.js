@@ -216,18 +216,12 @@ disableFilters();
 fillFormAddress(mainPin, PIN_MAIN.x, PIN_MAIN.x);
 
 const onMainPinMouseButton = (evt) => {
-  if (typeof evt === `object`) {
-    switch (evt.mainPin) {
-      case 0:
-        // console.log(`у меня тачпад, левый клик не срабатывает`);
-        break;
-      default:
-        activateSite();
-    }
+  if (typeof evt === `object` && evt.button === 0) {
+    activateSite();
   }
 };
 const onMainPinEnterPress = (evt) => {
-  if (evt.keyCode === 13) {
+  if (evt.key === `Enter`) {
     activateSite();
     delete evt.keyCode;
   }
@@ -247,15 +241,37 @@ mainPin.addEventListener(`mousedown`, onMainPinMouseButton);
 mainPin.addEventListener(`keydown`, onMainPinEnterPress);
 // связал селекты гостпй и комнат,пока без 3 гостей и 100 комнат
 mapFilters.addEventListener(`change`, () => {
+  const guestN = (N) => {
+    return selectGuests.querySelector(`[value="${N}"]`);
+  };
+  // const guests = mapFilters.querySelector(`#housing-guests`).querySelectorAll(`option`);
+  // for (let i = 0; i < guests.length; i++) {
+  //   guests[i].disabled = true;
+  // }
   if (selectRooms.value === `1`) {
-    selectGuests.value = `1`;
-  } else if (selectRooms.value === `2`) {
-    selectGuests.querySelector(`[value="2"]`).selected = true;
-    selectGuests.querySelector(`[value="0"]`).disabled = true;
-    selectGuests.querySelector(`[value="any"]`).disabled = true;
+    guestN(1).selected = true;
+    guestN(0).disabled = true;
+    guestN(2).disabled = true;
+    // guestN(3).disabled = true;
+    guestN(`any`).disabled = true;
+  }
+  if (selectRooms.value === `2`) {
+    guestN(2).selected = true;
+    guestN(2).disabled = false;
+    // guestN(3).disabled = true;
+    guestN(0).disabled = true;
+    guestN(`any`).disabled = true;
   } else if (selectRooms.value === `3`) {
-    selectGuests.querySelector(`[value="3"]`).selected = true;
-    selectGuests.querySelector(`[value="0"]`).disabled = true;
-    selectGuests.querySelector(`[value="any"]`).disabled = true;
+    // guestN(3).selected = true;
+    guestN(2).disabled = false;
+    guestN(1).disabled = false;
+    guestN(0).disabled = true;
+    guestN(`any`).disabled = true;
+  } else if (selectRooms.value === `100`) {
+    guestN(0).selected = true;
+    guestN(1).disabled = true;
+    guestN(2).disabled = true;
+    // guestN(3).disabled = true;
+    guestN(`any`).disabled = true;
   }
 });
