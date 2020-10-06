@@ -1,35 +1,7 @@
 'use strict';
 (function () {
+  const pinMain = document.querySelector(`.map__pin--main`);
 
-  const pinMain = window.consts.pinsWrapper.querySelector(`.map__pin--main`);
-  const PIN_MAIN = {
-    x: 65,
-    y: 87
-  };
-  const LOCATION = {
-    x: {
-      min: 0,
-      max: window.consts.map.getBoundingClientRect().right
-    },
-    y: {
-      min: 130,
-      max: 630
-    }
-  };
-  const addressInput = document.querySelector(`#address`);
-
-  const getCoords = (elem) => {
-    let box = elem.getBoundingClientRect();
-
-    return {
-      x: box.left + pageXOffset,
-      y: box.top + pageYOffset
-    };
-  };
-  const fillFormAddress = (elem, pinX, pinY) => {
-    const {x, y} = getCoords(elem);
-    addressInput.value = window.pin.addressToString(Math.floor(x + pinX / 2), Math.floor(y + pinY));
-  };
   pinMain.addEventListener(`mousedown`, function (evt) {
     evt.preventDefault();
 
@@ -55,18 +27,18 @@
         y: moveEvt.clientY
       };
 
-      pinMain.style.top = (pinMain.offsetTop - shift.y) + `px`;
-      pinMain.style.left = (pinMain.offsetLeft - shift.x) + `px`;
+      pinMain.style.top = `${(pinMain.offsetTop - shift.y)}px`;
+      pinMain.style.left = `${(pinMain.offsetLeft - shift.x)}px`;
 
-      if (pinMain.offsetTop - shift.y < LOCATION.y.min ||
-          pinMain.offsetTop - shift.y > LOCATION.y.max ||
-          pinMain.offsetLeft - shift.x < LOCATION.x.min ||
-          pinMain.offsetLeft - shift.x > LOCATION.x.max - PIN_MAIN.x) {
-        document.removeEventListener(`mousemove`, onMouseMove);
+      if (pinMain.offsetTop - shift.y < window.consts.LOCATION.y.min) {
+        pinMain.style.top = `${(window.consts.LOCATION.y.min)}px`;
+      } else if (pinMain.offsetTop - shift.y > window.consts.LOCATION.y.max) {
+        pinMain.style.top = `${(window.consts.LOCATION.y.max)}px`;
+      } else if (pinMain.offsetLeft - shift.x < window.consts.LOCATION.x.min) {
+        pinMain.style.left = `${(window.consts.LOCATION.x.min)}px`;
+      } else if (pinMain.offsetLeft - shift.x > window.consts.LOCATION.x.max - window.consts.PIN_MAIN.x) {
+        pinMain.style.left = `${(window.consts.LOCATION.x.max - window.consts.PIN_MAIN.x)}px`;
       }
-      // if (pinMain.offsetTop - shift.y > LOCATION.y.max || pinMain.offsetTop - shift.y < LOCATION.y.min) {
-      //   document.removeEventListener(`mousemove`, onMouseMove);
-      // }
     };
 
     const onMouseUp = function (upEvt) {
@@ -82,7 +54,7 @@
         };
         pinMain.addEventListener(`click`, onClickPreventDefault);
       }
-      fillFormAddress(pinMain, PIN_MAIN.x, PIN_MAIN.y);
+      window.form.fillFormAddress(pinMain, window.consts.PIN_MAIN.x, window.consts.PIN_MAIN.y);
     };
 
     document.addEventListener(`mousemove`, onMouseMove);

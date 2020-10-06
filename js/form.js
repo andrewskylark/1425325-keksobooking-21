@@ -15,9 +15,15 @@
       adInputs[i].disabled = false;
     }
   };
+  const fillFormAddress = (elem, pinX, pinY) => {
+    const addressInput = document.querySelector(`#address`);
+    const {x, y} = window.utils.getCoords(elem);
+    addressInput.value = window.utils.addressToString(Math.floor(x + pinX / 2), Math.floor(y + pinY));
+  };
   window.form = {
     enableForm,
     enableInputs,
-    disableInputs
+    disableInputs,
+    fillFormAddress
   };
 })();
