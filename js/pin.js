@@ -11,10 +11,11 @@
     min: 50,
     max: 150
   };
+  const map = document.querySelector(`.map`);
   const LOCATION = {
     x: {
       min: 0,
-      max: window.consts.map.getBoundingClientRect().right
+      max: map.getBoundingClientRect().right
     },
     y: {
       min: 130,
@@ -28,9 +29,6 @@
   const getAvatarUrl = (number) => {
     return `img/avatars/user0${number + 1}.png`;
   };
-  const addressToString = (x, y) => {
-    return `${x}, ${y}`;
-  };
   const getPinData = (number) => {
     const x = window.utils.getRandom(LOCATION.x.min, LOCATION.x.max);
     const y = window.utils.getRandom(LOCATION.y.min, LOCATION.y.max);
@@ -43,7 +41,7 @@
       },
       offer: {
         title: ``,
-        address: window.pin.addressToString(x, y),
+        address: window.utils.addressToString(x, y),
         price: window.utils.getRandom(PRICE.min, PRICE.max),
         type: window.utils.getRandomFromArray(TYPES),
         rooms: window.utils.getRandomFromArray(ROOMS),
@@ -74,7 +72,6 @@
   };
 
   window.pin = {
-    addressToString,
     getPinData,
     getPin
   };

@@ -29,6 +29,17 @@
       if (evt.key === ENTER_KEY) {
         action();
       }
+    },
+    addressToString: (x, y) => {
+      return `${x}, ${y}`;
+    },
+    getCoords: (elem) => {
+      let box = elem.getBoundingClientRect();
+
+      return {
+        x: box.left + pageXOffset,
+        y: box.top + pageYOffset
+      };
     }
   };
 })();

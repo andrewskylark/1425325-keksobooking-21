@@ -1,15 +1,16 @@
 'use strict';
 (() => {
-  const selectRooms = window.consts.mapFilters.querySelector(`#housing-rooms`);
-  const selectGuests = window.consts.mapFilters.querySelector(`#housing-guests`);
+  const mapFilters = document.querySelector(`.map__filters`);
+  const selectRooms = mapFilters.querySelector(`#housing-rooms`);
+  const selectGuests = mapFilters.querySelector(`#housing-guests`);
 
   const disableFilters = () => {
-    window.consts.mapFilters.classList.add(`map__filters--disabled`);
+    mapFilters.classList.add(`map__filters--disabled`);
   };
   const enableFilters = () => {
-    window.consts.mapFilters.classList.remove(`map__filters--disabled`);
+    mapFilters.classList.remove(`map__filters--disabled`);
   };
-  window.consts.mapFilters.addEventListener(`change`, () => {
+  mapFilters.addEventListener(`change`, () => {
     const guestN = (N) => {
       return selectGuests.querySelector(`[value="${N}"]`);
     };

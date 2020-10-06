@@ -1,5 +1,6 @@
 'use strict';
 (() => {
+  const fragment = document.createDocumentFragment();
   const getCardType = function (object) {
     switch (object.offer.type) {
       case `flat`:
@@ -48,9 +49,9 @@
 
 
     for (let i = 0; i < pinData.offer.photos.length; i++) {
-      window.consts.fragment.appendChild(photo.cloneNode(true)).src = pinData.offer.photos[i];
+      fragment.appendChild(photo.cloneNode(true)).src = pinData.offer.photos[i];
     }
-    photosWrapper.appendChild(window.consts.fragment);
+    photosWrapper.appendChild(fragment);
 
     return cardTemplate;
   };
