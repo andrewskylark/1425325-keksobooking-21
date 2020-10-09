@@ -18,6 +18,7 @@
   const getAvatarUrl = (number) => {
     return `img/avatars/user0${number + 1}.png`;
   };
+  // генерация обьекта пина рандомно из предоставленных данных
   const getPinData = (number) => {
     const x = window.utils.getRandom(window.consts.LOCATION.x.min, window.consts.LOCATION.x.max);
     const y = window.utils.getRandom(window.consts.LOCATION.y.min, window.consts.LOCATION.y.max);
@@ -47,19 +48,18 @@
       }
     };
   };
-  const getPin = (number) => {
-    const pinData = getPinData(number);
+  // рендеринг пина из шаблона
+  const getPin = (pinData) => {
     const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`).cloneNode(true);
     const avatar = pinTemplate.querySelector(`img`);
 
     avatar.src = pinData.author.avatar;
-    avatar.alt = `заголовок объявления`;
+    avatar.alt = pinData.offer.title;
     pinTemplate.style.left = `${pinData.location.x - (PIN.x / 2)}px`;
     pinTemplate.style.top = `${pinData.location.y - PIN.y}px`;
 
     return pinTemplate;
   };
-
   window.pin = {
     getPinData,
     getPin
