@@ -16,7 +16,7 @@
     window.form.enableInputs();
     window.form.enableForm();
     window.filters.enableFilters();
-    window.backend.download(window.map.onLoad);
+    window.backend.download(window.map.onLoad, window.backend.onError);
     window.form.fillFormAddress(pinMain, window.consts.PIN_MAIN.x, window.consts.PIN_MAIN.y);
     pinMain.removeEventListener(`keydown`, onPinMainEnterPress);
     pinMain.removeEventListener(`mousedown`, onPinMainMouseButton);

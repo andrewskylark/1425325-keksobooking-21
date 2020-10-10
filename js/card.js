@@ -15,8 +15,8 @@
         return `unknown`;
     }
   };
-  const fillCard = (number) => {
-    const pinData = window.pin.getPinData(number);
+  const fillCard = (num) => {
+    const pinData = window.pinData.getByNum(num);
     const cardTemplate = document.querySelector(`#card`).content.querySelector(`.popup`).cloneNode(true);
     const avatar = cardTemplate.querySelector(`img`);
     const featuresContainer = cardTemplate.querySelector(`.popup__features`);

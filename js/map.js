@@ -16,9 +16,11 @@
     pinsWrapper.append(fragment);
   };
   // рендер пинов из загруженных из сервера данных
+
   const onLoad = (pins) => {
+    window.pinData.saveToStore(pins);
     for (let i = 0; i < pins.length; i++) {
-      fragment.append(window.pin.getPin(pins[i]));
+      fragment.append(window.pin.generatePin(pins[i], i));
     }
     pinsWrapper.append(fragment);
   };
@@ -26,5 +28,16 @@
     showMap,
     renderPins,
     onLoad
+  };
+})();
+(() => {
+  window.pinData = {
+    store: [],
+    saveToStore: (pins) => {
+      window.pinData.store = pins;
+    },
+    getByNum: (num) => {
+      return window.pinData.store[num];
+    }
   };
 })();
