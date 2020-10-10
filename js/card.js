@@ -16,7 +16,7 @@
     }
   };
   const fillCard = (num) => {
-    const pinData = window.pinData.getByNum(num);
+    const pinData = window.pinsData.getByNum(num);
     const cardTemplate = document.querySelector(`#card`).content.querySelector(`.popup`).cloneNode(true);
     const avatar = cardTemplate.querySelector(`img`);
     const featuresContainer = cardTemplate.querySelector(`.popup__features`);
