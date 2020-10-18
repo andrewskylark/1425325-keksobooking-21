@@ -1,19 +1,25 @@
 'use strict';
 (() => {
   const fragment = document.createDocumentFragment();
-  const getCardType = function (object) {
-    switch (object.offer.type) {
-      case `flat`:
-        return `квартира`;
-      case `house`:
-        return `дом`;
-      case `bungalow`:
-        return `бунгало`;
-      case `palace`:
-        return `дворец`;
-      default:
-        return `unknown`;
-    }
+  // const getCardType = function (object) {
+  //   switch (object.offer.type) {
+  //     case `flat`:
+  //       return `квартира`;
+  //     case `house`:
+  //       return `дом`;
+  //     case `bungalow`:
+  //       return `бунгало`;
+  //     case `palace`:
+  //       return `дворец`;
+  //     default:
+  //       return `unknown`;
+  //   }
+  // };
+  const roomTypeMap = {
+    flat: `квартира`,
+    house: `дом`,
+    bungalow: `бунгало`,
+    palace: `дворец`
   };
   const generateCard = (num) => {
     const pinData = window.pinsData.getByNum(num);
@@ -36,7 +42,7 @@
     cardTemplate.querySelector(`.popup__title`).textContent = pinData.offer.title;
     cardTemplate.querySelector(`.popup__text--address`).textContent = pinData.offer.address;
     cardTemplate.querySelector(`.popup__text--price`).textContent = `${pinData.offer.price} ₽/ночь`;
-    cardTemplate.querySelector(`.popup__type`).textContent = getCardType(pinData);
+    cardTemplate.querySelector(`.popup__type`).textContent = roomTypeMap[pinData.offer.type];
     cardTemplate.querySelector(`.popup__text--capacity`).textContent = `${pinData.offer.rooms} комнаты для ${pinData.offer.guests} гостей`;
     cardTemplate.querySelector(`.popup__text--time`).textContent = `Заезд после ${pinData.offer.checkin}, выезд до ${pinData.offer.checkout}`;
     cardTemplate.querySelector(`.popup__description`).textContent = pinData.offer.description;
