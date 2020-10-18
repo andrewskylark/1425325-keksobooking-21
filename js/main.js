@@ -15,8 +15,16 @@ pinsWrapper.addEventListener(`click`, (evt) => {
   }
   if ((evt.target.tagName === `IMG` || evt.target.tagName === `BUTTON`) && !evt.target.attributes[`data-pin-main`]) {
     const pinId = evt.target.getAttribute(`data-pin-id`);
-
     const filtersContainer = map.querySelector(`.map__filters-container`);
-    map.insertBefore(window.card.fillCard(pinId), filtersContainer);
+    map.insertBefore(window.card.generateCard(pinId), filtersContainer);
   }
 });
+// const popupClose = document.querySelector(`.popup .popup__close`);
+// if (popupClose) {
+//   document.addEventListener(`keydown`, (evt) => {
+//     if (evt.key === `Escape`) {
+//       console.log(`keydow`)
+//       // popupClose.click();
+//     }
+//   });
+// }
