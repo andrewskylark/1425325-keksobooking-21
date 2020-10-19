@@ -1,6 +1,7 @@
 'use strict';
 (() => {
   const URL_DOWN = `https://21.javascript.pages.academy/keksobooking/data`;
+  const URL_UP = `https://21.javascript.pages.academy/keksobooking`;
 
   const download = (onLoad, onError) => {
     const xhr = new XMLHttpRequest();
@@ -38,30 +39,64 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
-  // let onLoad = (pins) => {
-  //   let pinsDataFromServer = pins;
-  //   console.log(pinsDataFromServer);
-  // };
-  // let pinsDataFromServer = () => {
-  //   const xhr = new XMLHttpRequest();
-  //   xhr.responseType = `json`;
-  //   xhr.open(`GET`, URL_DOWN);
+  const upload = (data, onUpError, onSuccess) => {
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = `json`;
+    xhr.open(`POST`, URL_UP);
 
-  //   xhr.addEventListener(`load`, () => {
-  //     let Data = xhr.response;
-  //     console.log(Data);
-  //     Get
-  //   });
+    xhr.addEventListener(`load`, () => {
+      if (xhr.status === 200) {
+        onSuccess(xhr.response);
+      } else {
+        onUpError();
+      }
+    });
+    xhr.addEventListener(`error`, ()=> {
+      onUpError();
+    });
+    xhr.send(data);
+  };
 
-  //   xhr.send();
-  // };
-  // pinsDataFromServer();
-  // const onLoad = (pins) => {
-  //   return pins;
-  // };
+  const renderSuccessPopup = () => {
+    const successPopup = document.querySelector(`#success`).content.querySelector(`.success`).cloneNode(true);
+    document.body.insertAdjacentElement(`afterbegin`, successPopup);
+
+    const closeSuccess = () => {
+      document.querySelector(`.success`).remove();
+      window.removeEventListener(`click`, closeSuccess);
+      document.removeEventListener(`keydown`, onPopupEscPress);
+    };
+    const onPopupEscPress = (evt) => {
+      window.utils.isEscEvt(evt, closeSuccess());
+    };
+    document.addEventListener(`keydown`, onPopupEscPress);
+    window.addEventListener(`click`, closeSuccess);
+  };
+
+  const formErrorHandler = () => {
+    const errorPopup = document.querySelector(`#error`).content.querySelector(`.error`).cloneNode(true);
+    const closeBtn = errorPopup.querySelector(`.error__button`);
+    document.querySelector(`main`).insertAdjacentElement(`afterbegin`, errorPopup);
+
+    const closeError = () => {
+      document.querySelector(`.error`).remove();
+      window.removeEventListener(`click`, closeError);
+      document.removeEventListener(`keydown`, onPopupEscPress);
+      closeBtn.removeEventListener(`click`, closeError);
+    };
+    const onPopupEscPress = (evt) => {
+      window.utils.isEscEvt(evt, closeError);
+    };
+    closeBtn.addEventListener(`click`, closeError);
+    document.addEventListener(`keydown`, onPopupEscPress);
+    window.addEventListener(`click`, closeError);
+  };
 
   window.backend = {
     download,
-    onError
+    upload,
+    onError,
+    renderSuccessPopup,
+    formErrorHandler
   };
 })();

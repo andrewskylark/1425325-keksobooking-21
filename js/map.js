@@ -7,6 +7,9 @@
   const showMap = function () {
     map.classList.remove(`map--faded`);
   };
+  const hideMap = function () {
+    map.classList.add(`map--faded`);
+  };
   // рендер пинов из загруженных из сервера данных
   const onLoad = (pins) => {
     window.pinsData.saveToStore(pins);
@@ -15,8 +18,10 @@
     }
     pinsWrapper.append(fragment);
   };
+
   window.map = {
     showMap,
+    hideMap,
     onLoad
   };
 })();
