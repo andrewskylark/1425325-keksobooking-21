@@ -3,29 +3,38 @@
   const MIN_TITLE_LENGTH = 30;
   const adForm = document.querySelector(`.ad-form`);
   const adInputs = adForm.querySelectorAll(`fieldset`);
-  const address = adForm.querySelector(`#address`);
+  const adFormBtnReset = adForm.querySelector(`button[type="reset"]`);
   // активация / деактивация формы и инпутов
   const enableForm = () => {
     adForm.classList.remove(`ad-form--disabled`);
-    address.disabled = true;
     roomCapacity.querySelector(`[value="1"]`).selected = true;
     roomType.querySelector(`[value="house"]`).selected = true;
+
+    adFormBtnReset.addEventListener(`click`, () => {
+      adForm.reset();
+    });
   };
-  const disableInputs = () => {
-    for (let i = 0; i < adInputs.length; i++) {
-      adInputs[i].disabled = true;
-    }
+  const disableForm = () => {
+    adForm.classList.add(`ad-form--disabled`);
+    adFormBtnReset.removeEventListener(`click`, () => {
+      adForm.reset();
+    });
   };
   const enableInputs = () => {
     for (let i = 0; i < adInputs.length; i++) {
       adInputs[i].disabled = false;
     }
   };
+  const disableInputs = () => {
+    for (let i = 0; i < adInputs.length; i++) {
+      adInputs[i].disabled = true;
+    }
+  };
   // запись координат пина в адрес формы
   const fillFormAddress = (elem, pinX, pinY) => {
     const addressInput = document.querySelector(`#address`);
     const {x, y} = window.utils.getCoords(elem);
-    addressInput.value = window.utils.addressToString(Math.floor(x + pinX / 2), Math.floor(y + pinY));
+    addressInput.setAttribute(`value`, window.utils.addressToString(Math.floor(x + pinX / 2), Math.floor(y + pinY)));
   };
   // валидация
   const roomsNumber = adForm.querySelector(`#room_number`);
@@ -111,9 +120,20 @@
     }
   });
 
+  const formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    window.backend.upload(new FormData(adForm), window.backend.formErrorHandler, () => {
+      window.backend.renderSuccessPopup();
+      window.init.deactivateSite();
+    });
+  };
+
+  adForm.addEventListener(`submit`, formSubmitHandler);
+
   window.form = {
     enableForm,
     enableInputs,
+    disableForm,
     disableInputs,
     fillFormAddress
   };

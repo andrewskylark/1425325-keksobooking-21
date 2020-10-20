@@ -19,12 +19,3 @@ pinsWrapper.addEventListener(`click`, (evt) => {
     map.insertBefore(window.card.generateCard(pinId), filtersContainer);
   }
 });
-// const popupClose = document.querySelector(`.popup .popup__close`);
-// if (popupClose) {
-//   document.addEventListener(`keydown`, (evt) => {
-//     if (evt.key === `Escape`) {
-//       console.log(`keydow`)
-//       // popupClose.click();
-//     }
-//   });
-// }
