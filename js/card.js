@@ -1,28 +1,16 @@
 'use strict';
 (() => {
   const fragment = document.createDocumentFragment();
-  // const getCardType = function (object) {
-  //   switch (object.offer.type) {
-  //     case `flat`:
-  //       return `квартира`;
-  //     case `house`:
-  //       return `дом`;
-  //     case `bungalow`:
-  //       return `бунгало`;
-  //     case `palace`:
-  //       return `дворец`;
-  //     default:
-  //       return `unknown`;
-  //   }
-  // };
+  // словарь типа жилья, стр 32
   const roomTypeMap = {
     flat: `квартира`,
     house: `дом`,
     bungalow: `бунгало`,
     palace: `дворец`
   };
-  const generateCard = (num) => {
-    const pinData = window.pinsData.getByNum(num);
+
+  const generateCard = (pinData) => {
+    // const pinData = window.pinsData.getByNum(num);
     const cardTemplate = document.querySelector(`#card`).content.querySelector(`.popup`).cloneNode(true);
     const avatar = cardTemplate.querySelector(`img`);
     const featuresContainer = cardTemplate.querySelector(`.popup__features`);

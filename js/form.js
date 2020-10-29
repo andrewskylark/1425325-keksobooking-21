@@ -4,7 +4,7 @@
   const adForm = document.querySelector(`.ad-form`);
   const adInputs = adForm.querySelectorAll(`fieldset`);
   const adFormBtnReset = adForm.querySelector(`button[type="reset"]`);
-  // активация / деактивация формы и инпутов
+  // активация/деактивация формы и инпутов
   const enableForm = () => {
     adForm.classList.remove(`ad-form--disabled`);
     roomCapacity.querySelector(`[value="1"]`).selected = true;
