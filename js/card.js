@@ -57,8 +57,16 @@
 
     return cardTemplate;
   };
+  const removeCard = () => {
+    const cardPopup = document.querySelector(`.map__card.popup`);
+
+    if (cardPopup) {
+      cardPopup.remove();
+    }
+  };
 
   window.card = {
-    generateCard
+    generateCard,
+    removeCard
   };
 })();

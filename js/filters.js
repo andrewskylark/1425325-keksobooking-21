@@ -14,11 +14,7 @@
     mapFilters.style.opacity = 1;
   };
   mapFilters.addEventListener(`change`, () => {
-    const popupCard = document.querySelector(`.map__card.popup`);
-
-    if (popupCard) {
-      popupCard.remove();
-    }
+    window.card.removeCard();
 
     const guestN = (N) => {
       return selectGuests.querySelector(`[value="${N}"]`);
@@ -55,17 +51,17 @@
   });
   selectHousingType.addEventListener(`change`, () => {
     window.pin.removePins();
+    if (selectHousingType.value === `any`) {
+      window.map.updatePins(window.pinsData.store);
+    } else {
+      const housingTypePins = window.pinsData.store.filter((pin) => {
+        return pin.offer.type === selectHousingType.value;
+      });
 
-    const housingTypePins = window.pinsData.store.filter((pin) => {
-      return pin.offer.type === selectHousingType.value;
-    });
-    const filteredPins = housingTypePins.concat(window.pinsData.store);
-    const uniqueFilteredPins = filteredPins.filter((pin, index) => {
-      return filteredPins.indexOf(pin) === index;
-    });
-
-    window.map.updatePins(uniqueFilteredPins);
+      window.map.updatePins(housingTypePins);
+    }
   });
+
   window.filters = {
     enableFilters,
     disableFilters

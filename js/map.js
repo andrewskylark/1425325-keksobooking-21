@@ -10,22 +10,19 @@
     map.classList.add(`map--faded`);
   };
   // рендер пинов из загруженных из сервера данных
-  let pinsData = [];
+  // let pinsData = [];
   const onLoad = (pins) => {
     window.pinsData.saveToStore(pins);
-    pinsData = pins;
-    updatePins(pinsData);
+    // pinsData = pins;
+    updatePins(pins);
   };
 
   const updatePins = (pins) => {
     window.pin.renderPins(pins);
 
     pinsWrapper.addEventListener(`click`, (evt) => {
-      const popupClose = document.querySelector(`.popup .popup__close`);
+      window.card.removeCard();
 
-      if (popupClose) {
-        popupClose.click();
-      }
       if ((evt.target.tagName === `IMG` || evt.target.tagName === `BUTTON`) && !evt.target.attributes[`data-pin-main`]) {
         const pinId = evt.target.getAttribute(`data-pin-id`);
         const filtersContainer = map.querySelector(`.map__filters-container`);
