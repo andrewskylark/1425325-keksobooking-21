@@ -20,15 +20,22 @@
   const updatePins = (pins) => {
     window.pin.renderPins(pins);
 
-    pinsWrapper.addEventListener(`click`, (evt) => {
-      window.card.removeCard();
+    const renderedPins = pinsWrapper.querySelectorAll(`button[data-pin-id]`);
 
-      if ((evt.target.tagName === `IMG` || evt.target.tagName === `BUTTON`) && !evt.target.attributes[`data-pin-main`]) {
+    for (let renderedPin of renderedPins) {
+      const onPinClickHandler = (evt) => {
+        window.card.removeCard();
+        // window.removeCard();
+
         const pinId = evt.target.getAttribute(`data-pin-id`);
         const filtersContainer = map.querySelector(`.map__filters-container`);
+
         map.insertBefore(window.card.generateCard(pins[pinId]), filtersContainer);
-      }
-    });
+
+      };
+      renderedPin.addEventListener(`click`, onPinClickHandler);
+    }
+
   };
 
   window.map = {

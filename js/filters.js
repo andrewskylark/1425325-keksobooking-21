@@ -51,6 +51,7 @@
   });
   selectHousingType.addEventListener(`change`, () => {
     window.pin.removePins();
+
     if (selectHousingType.value === `any`) {
       window.map.updatePins(window.pinsData.store);
     } else {

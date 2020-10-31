@@ -18,14 +18,6 @@
     const pinsClasses = pinData.offer.features;
     const btnClose = cardTemplate.querySelector(`.popup__close`);
 
-    for (let i = 0; i < features.length; i++) {
-      let feature = features[i];
-      let pinClassName = feature.className.replace(`popup__feature popup__feature--`, ``);
-      if (pinsClasses.includes(pinClassName) === false) {
-        feature.remove();
-      }
-    }
-
     avatar.src = pinData.author.avatar;
     cardTemplate.querySelector(`.popup__title`).textContent = pinData.offer.title;
     cardTemplate.querySelector(`.popup__text--address`).textContent = pinData.offer.address;
@@ -34,6 +26,7 @@
     cardTemplate.querySelector(`.popup__text--capacity`).textContent = `${pinData.offer.rooms} комнаты для ${pinData.offer.guests} гостей`;
     cardTemplate.querySelector(`.popup__text--time`).textContent = `Заезд после ${pinData.offer.checkin}, выезд до ${pinData.offer.checkout}`;
     cardTemplate.querySelector(`.popup__description`).textContent = pinData.offer.description;
+
     const photosWrapper = cardTemplate.querySelector(`.popup__photos`);
     const photo = photosWrapper.querySelector(`.popup__photo`);
     photosWrapper.removeChild(photo);
@@ -43,16 +36,26 @@
     }
     photosWrapper.appendChild(fragment);
 
+    for (let i = 0; i < features.length; i++) {
+      let feature = features[i];
+      let pinClassName = feature.className.replace(`popup__feature popup__feature--`, ``);
+      if (pinsClasses.includes(pinClassName) === false) {
+        feature.remove();
+      }
+    }
     const onBtnClose = () => {
+      window.removeCard();
+    };
+    const onPopupEscPress = (evt) => {
+      window.utils.isEscEvt(evt, window.removeCard);
+    };
+    window.removeCard = () => {
       cardTemplate.remove();
       document.removeEventListener(`keydown`, onPopupEscPress);
       btnClose.removeEventListener(`click`, onBtnClose);
     };
-    btnClose.addEventListener(`click`, onBtnClose);
 
-    const onPopupEscPress = (evt) => {
-      window.utils.isEscEvt(evt, onBtnClose);
-    };
+    btnClose.addEventListener(`click`, onBtnClose);
     document.addEventListener(`keydown`, onPopupEscPress);
 
     return cardTemplate;
@@ -61,7 +64,8 @@
     const cardPopup = document.querySelector(`.map__card.popup`);
 
     if (cardPopup) {
-      cardPopup.remove();
+      // cardPopup.remove();
+      window.removeCard();
     }
   };
 
