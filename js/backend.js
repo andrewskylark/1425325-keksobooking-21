@@ -8,15 +8,21 @@
     xhr.responseType = `json`;
     xhr.open(`GET`, URL_DOWN);
 
+    xhr.addEventListener(`load`, () => {
+      if (xhr.status === 200) {
+        onLoad(xhr.response);
+        window.filters.enableFilters();
+      } else {
+        onError(`Ошибка загрузки данных`);
+      }
+    });
     xhr.addEventListener(`error`, () => {
       onError(`Oшибка соединения`);
     });
     xhr.addEventListener(`timeout`, () => {
       onError(`Запрос не успел выполниться за` + xhr.timeout + `mc`);
     });
-    xhr.addEventListener(`load`, () => {
-      onLoad(xhr.response);
-    });
+
     xhr.send();
   };
 
@@ -54,6 +60,7 @@
     xhr.addEventListener(`error`, ()=> {
       onUpError();
     });
+
     xhr.send(data);
   };
 
@@ -69,6 +76,7 @@
     const onPopupEscPress = (evt) => {
       window.utils.isEscEvt(evt, closeSuccess());
     };
+
     document.addEventListener(`keydown`, onPopupEscPress);
     window.addEventListener(`click`, closeSuccess);
   };

@@ -1,9 +1,12 @@
 'use strict';
 (() => {
+  const MAX_PINS_COUNT = 5;
   const PIN = {
     x: 50,
     y: 70
   };
+  const fragment = document.createDocumentFragment();
+  const pinsWrapper = document.querySelector(`.map__pins`);
   // рендеринг пина из шаблона
   const generatePin = (pinData, j) => {
     const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`).cloneNode(true);
@@ -18,7 +21,23 @@
 
     return pinTemplate;
   };
+  const renderPins = (pins) => {
+    for (let i = 0; (i < pins.length) && (i < MAX_PINS_COUNT); i++) {
+      fragment.append(window.pin.generatePin(pins[i], i));
+    }
+    pinsWrapper.append(fragment);
+  };
+  const removePins = () => {
+    const pins = pinsWrapper.querySelectorAll(`button[data-pin-id]`);
+
+    for (let pin of pins) {
+      pin.remove();
+    }
+  };
+
   window.pin = {
-    generatePin
+    generatePin,
+    renderPins,
+    removePins,
   };
 })();

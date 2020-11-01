@@ -1,7 +1,6 @@
 'use strict';
 (() => {
   const map = document.querySelector(`.map`);
-  const fragment = document.createDocumentFragment();
   const pinsWrapper = document.querySelector(`.map__pins`);
 
   const showMap = function () {
@@ -11,17 +10,38 @@
     map.classList.add(`map--faded`);
   };
   // рендер пинов из загруженных из сервера данных
+  // let pinsData = [];
   const onLoad = (pins) => {
     window.pinsData.saveToStore(pins);
-    for (let i = 0; i < pins.length; i++) {
-      fragment.append(window.pin.generatePin(pins[i], i));
+    // pinsData = pins;
+    updatePins(pins);
+  };
+
+  const updatePins = (pins) => {
+    window.pin.renderPins(pins);
+
+    const renderedPins = pinsWrapper.querySelectorAll(`button[data-pin-id]`);
+
+    for (let renderedPin of renderedPins) {
+      const onPinClickHandler = (evt) => {
+        window.card.removeCard();
+        // window.removeCard();
+
+        const pinId = evt.target.getAttribute(`data-pin-id`);
+        const filtersContainer = map.querySelector(`.map__filters-container`);
+
+        map.insertBefore(window.card.generateCard(pins[pinId]), filtersContainer);
+
+      };
+      renderedPin.addEventListener(`click`, onPinClickHandler);
     }
-    pinsWrapper.append(fragment);
+
   };
 
   window.map = {
     showMap,
     hideMap,
-    onLoad
+    onLoad,
+    updatePins
   };
 })();
