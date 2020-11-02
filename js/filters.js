@@ -39,6 +39,8 @@
         return pin.offer.price >= LOW_PRICE && pin.offer.price <= HIGH_PRICE;
       } else if (selectPrice.value === `high`) {
         return pin.offer.price > HIGH_PRICE;
+      } else {
+        return false;
       }
     });
     const roomsPins = pricePins.filter((pin) => {
