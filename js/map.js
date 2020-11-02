@@ -18,6 +18,7 @@
   };
 
   const updatePins = (pins) => {
+    window.pin.removePins();
     window.pin.renderPins(pins);
 
     const renderedPins = pinsWrapper.querySelectorAll(`button[data-pin-id]`);
@@ -25,7 +26,6 @@
     for (let renderedPin of renderedPins) {
       const onPinClickHandler = (evt) => {
         window.card.removeCard();
-        // window.removeCard();
 
         const pinId = evt.target.getAttribute(`data-pin-id`);
         const filtersContainer = map.querySelector(`.map__filters-container`);

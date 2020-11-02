@@ -1,5 +1,7 @@
 'use strict';
 (() => {
+  const LOW_PRICE = 10000;
+  const HIGH_PRICE = 50000;
   const mapFilters = document.querySelector(`.map__filters`);
   const selectRooms = mapFilters.querySelector(`#housing-rooms`);
   const selectGuests = mapFilters.querySelector(`#housing-guests`);
@@ -15,80 +17,66 @@
     mapFilters.classList.remove(`map__filters--disabled`);
     mapFilters.style.opacity = 1;
   };
-  // mapFilters.addEventListener(`change`, () => {
-  //   window.card.removeCard();
 
-  //   const guestN = (N) => {
-  //     return selectGuests.querySelector(`[value="${N}"]`);
-  //   };
-
-  //   if (selectRooms.value === `1`) {
-  //     guestN(1).selected = true;
-  //     guestN(0).disabled = true;
-  //     guestN(2).disabled = true;
-  //     guestN(3).disabled = true;
-  //     guestN(`any`).disabled = true;
-  //   }
-  //   if (selectRooms.value === `2`) {
-  //     guestN(2).selected = true;
-  //     guestN(2).disabled = false;
-  //     guestN(3).disabled = true;
-  //     guestN(0).disabled = true;
-  //     guestN(`any`).disabled = true;
-  //   } else if (selectRooms.value === `3`) {
-  //     guestN(3).selected = true;
-  //     guestN(3).disabled = false;
-  //     guestN(2).disabled = false;
-  //     guestN(1).disabled = false;
-  //     guestN(0).disabled = true;
-  //     guestN(`any`).disabled = true;
-  //   } else if (selectRooms.value === `100`) {
-  //     guestN(0).selected = true;
-  //     guestN(0).disabled = false;
-  //     guestN(1).disabled = true;
-  //     guestN(2).disabled = true;
-  //     guestN(3).disabled = true;
-  //     guestN(`any`).disabled = true;
-  //   }
-  // });
-  mapFilters.addEventListener(`change`, (evt) => {
-    window.pin.removePins();
+  mapFilters.addEventListener(`change`, window.debounce(() => {
+    window.card.removeCard();
 
     const housingTypePins = window.pinsData.store.filter((pin) => {
-      return pin.offer.type === selectHousingType.value;
-    });
-    console.log(housingTypePins);
-    const pricePins = window.pinsData.store.filter((pin) => {
-      if (selectPrice.value === `low`) {
-        return pin.offer.price < 10000;
-      } else if (selectPrice.value === `middle`) {
-        return pin.offer.price >= 10000 && pin.offer.price <= 50000;
-      } else if (selectPrice.value === `high`) {
-        return pin.offer.price > 50000;
+
+      if (selectHousingType.value === `any`) {
+        return window.pinsData.store;
+      } else {
+        return pin.offer.type === selectHousingType.value;
       }
     });
-    console.log(pricePins);
-    const roomsPins = window.pinsData.store.filter((pin) => {
-      console.log(pin.offer.rooms);
-      console.log(selectRooms.value);
-      return pin.offer.rooms === selectRooms.value;
+    const pricePins = housingTypePins.filter((pin) => {
+
+      if (selectPrice.value === `any`) {
+        return housingTypePins;
+      } else if (selectPrice.value === `low`) {
+        return pin.offer.price < LOW_PRICE;
+      } else if (selectPrice.value === `middle`) {
+        return pin.offer.price >= LOW_PRICE && pin.offer.price <= HIGH_PRICE;
+      } else if (selectPrice.value === `high`) {
+        return pin.offer.price > HIGH_PRICE;
+      }
+    });
+    const roomsPins = pricePins.filter((pin) => {
+
+      if (selectRooms.value === `any`) {
+        return pricePins;
+      } else {
+        return pin.offer.rooms === parseInt(selectRooms.value, 10);
+      }
+    });
+    const guestsPins = roomsPins.filter((pin) => {
+
+      if (selectGuests.value === `any`) {
+        return roomsPins;
+      } else {
+        return pin.offer.guests === parseInt(selectGuests.value, 10);
+      }
+    });
+    const featuresPins = guestsPins.filter((pin) => {
+
+      const checkedFeatures = selectFeatures.querySelectorAll(`input[type="checkbox"]:checked`);
+      let checkedFeaturesValues = [];
+
+      for (let chackedFeature of checkedFeatures) {
+        checkedFeaturesValues.push(chackedFeature.value);
+      }
+
+      const filteredFeatures = checkedFeaturesValues.every((value) => {
+        return pin.offer.features.includes(value);
+      });
+
+      return filteredFeatures;
 
     });
-    console.log(roomsPins);
-    const guestsPins = window.pinsData.store.filter((pin) => {
-      return pin.offer.guests === selectGuests.value;
-    });
-    console.log(guestsPins);
-    // const featuresPins = window.pinsData.store.filter((pin) => {
-    //  if (evt.target.matches(`input[type="checkbox"]`)) {
-    //   console.log(evt.target.value);
-    //    return pin.offer.features.some(evt.target.value) === evt.target.value;
-    //  };
-    // });
-    // console.log(featuresPins);
-    // window.map.updatePins(guestsPins);
 
-  });
+    window.map.updatePins(featuresPins);
+
+  }));
 
   window.filters = {
     enableFilters,
