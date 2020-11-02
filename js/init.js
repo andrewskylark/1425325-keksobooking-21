@@ -23,13 +23,14 @@
     pinMain.removeEventListener(`mousedown`, onPinMainMouseButton);
   };
   const deactivateSite = () => {
-    window.pin.deletePins();
+    window.pin.removePins();
     window.map.hideMap();
     window.form.disableInputs();
     window.form.disableForm();
     window.filters.disableFilters();
     window.form.fillFormAddress(pinMain, window.consts.PIN_MAIN.x, window.consts.PIN_MAIN.y);
     adForm.reset();
+    window.previews.clearPreviews();
     pinMain.addEventListener(`mousedown`, onPinMainMouseButton);
     pinMain.addEventListener(`keydown`, onPinMainEnterPress);
   };

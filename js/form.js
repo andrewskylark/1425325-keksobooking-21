@@ -12,6 +12,7 @@
 
     adFormBtnReset.addEventListener(`click`, () => {
       adForm.reset();
+      window.previews.clearPreviews();
     });
   };
   const disableForm = () => {
