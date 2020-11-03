@@ -34,10 +34,18 @@
       pin.remove();
     }
   };
+  const removeActivePin = () => {
+    const activePin = document.querySelector(`.map__pin--active`);
+
+    if (activePin) {
+      activePin.classList.remove(`map__pin--active`);
+    }
+  };
 
   window.pin = {
     generatePin,
     renderPins,
     removePins,
+    removeActivePin
   };
 })();

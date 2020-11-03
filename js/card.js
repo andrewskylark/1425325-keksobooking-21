@@ -10,7 +10,6 @@
   };
 
   const generateCard = (pinData) => {
-    // const pinData = window.pinsData.getByNum(num);
     const cardTemplate = document.querySelector(`#card`).content.querySelector(`.popup`).cloneNode(true);
     const avatar = cardTemplate.querySelector(`img`);
     const featuresContainer = cardTemplate.querySelector(`.popup__features`);
@@ -64,7 +63,6 @@
     const cardPopup = document.querySelector(`.map__card.popup`);
 
     if (cardPopup) {
-      // cardPopup.remove();
       window.removeCard();
     }
   };

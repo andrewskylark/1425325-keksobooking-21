@@ -30,10 +30,10 @@
       pinMain.style.top = `${(pinMain.offsetTop - shift.y)}px`;
       pinMain.style.left = `${(pinMain.offsetLeft - shift.x)}px`;
 
-      if (pinMain.offsetTop - shift.y < window.consts.LOCATION.y.min) {
-        pinMain.style.top = `${(window.consts.LOCATION.y.min)}px`;
-      } else if (pinMain.offsetTop - shift.y > window.consts.LOCATION.y.max) {
-        pinMain.style.top = `${(window.consts.LOCATION.y.max)}px`;
+      if (pinMain.offsetTop - shift.y < (window.consts.LOCATION.y.min - window.consts.PIN_MAIN.y)) {
+        pinMain.style.top = `${(window.consts.LOCATION.y.min) - window.consts.PIN_MAIN.y}px`;
+      } else if (pinMain.offsetTop - shift.y > window.consts.LOCATION.y.max - window.consts.PIN_MAIN.y) {
+        pinMain.style.top = `${(window.consts.LOCATION.y.max - window.consts.PIN_MAIN.y)}px`;
       } else if (pinMain.offsetLeft - shift.x < window.consts.LOCATION.x.min) {
         pinMain.style.left = `${(window.consts.LOCATION.x.min)}px`;
       } else if (pinMain.offsetLeft - shift.x > window.consts.LOCATION.x.max - window.consts.PIN_MAIN.x) {

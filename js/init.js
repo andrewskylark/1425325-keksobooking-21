@@ -2,6 +2,7 @@
 (() => {
   const pinMain = document.querySelector(`.map__pins .map__pin--main`);
   const adForm = document.querySelector(`.ad-form`);
+  const mapFilters = document.querySelector(`.map__filters`);
 
   const onPinMainMouseButton = (evt) => {
     if (typeof evt === `object` && evt.button === 0) {
@@ -24,12 +25,16 @@
   };
   const deactivateSite = () => {
     window.pin.removePins();
+    window.card.removeCard();
     window.map.hideMap();
     window.form.disableInputs();
     window.form.disableForm();
     window.filters.disableFilters();
-    window.form.fillFormAddress(pinMain, window.consts.PIN_MAIN.x, window.consts.PIN_MAIN.y);
+    pinMain.style.left = `${window.consts.PIN_MAIN_DEFAULT.x}px`;
+    pinMain.style.top = `${window.consts.PIN_MAIN_DEFAULT.y}px`;
+    window.form.fillFormAddress(pinMain, window.consts.PIN_MAIN.x, window.consts.PIN_MAIN.x);
     adForm.reset();
+    mapFilters.reset();
     window.previews.clearPreviews();
     pinMain.addEventListener(`mousedown`, onPinMainMouseButton);
     pinMain.addEventListener(`keydown`, onPinMainEnterPress);

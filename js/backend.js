@@ -84,6 +84,7 @@
   const formErrorHandler = () => {
     const errorPopup = document.querySelector(`#error`).content.querySelector(`.error`).cloneNode(true);
     const closeBtn = errorPopup.querySelector(`.error__button`);
+
     document.querySelector(`main`).insertAdjacentElement(`afterbegin`, errorPopup);
 
     const closeError = () => {

@@ -3,6 +3,7 @@
   const LOW_PRICE = 10000;
   const HIGH_PRICE = 50000;
   const mapFilters = document.querySelector(`.map__filters`);
+  const filterSelects = mapFilters.querySelectorAll(`select`);
   const selectRooms = mapFilters.querySelector(`#housing-rooms`);
   const selectGuests = mapFilters.querySelector(`#housing-guests`);
   const selectHousingType = mapFilters.querySelector(`#housing-type`);
@@ -10,10 +11,19 @@
   const selectFeatures = mapFilters.querySelector(`#housing-features`);
 
   const disableFilters = () => {
+    for (let filterSelect of filterSelects) {
+      filterSelect.disabled = true;
+    }
+    mapFilters.querySelector(`fieldset.map__features`).disabled = true;
     mapFilters.classList.add(`map__filters--disabled`);
     mapFilters.style.opacity = 0;
+    mapFilters.reset();
   };
   const enableFilters = () => {
+    for (let filterSelect of filterSelects) {
+      filterSelect.disabled = false;
+    }
+    mapFilters.querySelector(`fieldset.map__features`).disabled = false;
     mapFilters.classList.remove(`map__filters--disabled`);
     mapFilters.style.opacity = 1;
   };
