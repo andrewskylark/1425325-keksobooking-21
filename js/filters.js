@@ -74,8 +74,8 @@
       const checkedFeatures = selectFeatures.querySelectorAll(`input[type="checkbox"]:checked`);
       let checkedFeaturesValues = [];
 
-      for (let chackedFeature of checkedFeatures) {
-        checkedFeaturesValues.push(chackedFeature.value);
+      for (let checkedFeature of checkedFeatures) {
+        checkedFeaturesValues.push(checkedFeature.value);
       }
 
       const filteredFeatures = checkedFeaturesValues.every((value) => {
