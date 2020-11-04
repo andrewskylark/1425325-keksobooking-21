@@ -30,9 +30,6 @@
         action();
       }
     },
-    // onPopupEscPress: (action) => {
-    //   window.utils.isEscEvt(action);
-    // },
     addressToString: (x, y) => {
       return `${x}, ${y}`;
     },

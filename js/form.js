@@ -2,7 +2,7 @@
 (() => {
   const MIN_TITLE_LENGTH = 30;
   const adForm = document.querySelector(`.ad-form`);
-  const adInputs = adForm.querySelectorAll(`fieldset`);
+  const adFieldsets = adForm.querySelectorAll(`fieldset`);
   const adFormBtnReset = adForm.querySelector(`button[type="reset"]`);
   // активация/деактивация формы и инпутов
   const enableForm = () => {
@@ -11,23 +11,29 @@
     roomType.querySelector(`[value="house"]`).selected = true;
 
     adFormBtnReset.addEventListener(`click`, () => {
-      adForm.reset();
+      window.init.deactivateSite();
+
+      const inputs = adForm.querySelectorAll(`input`);
+
+      for (let input of inputs) {
+        input.style.outline = `none`;
+      }
     });
   };
   const disableForm = () => {
     adForm.classList.add(`ad-form--disabled`);
     adFormBtnReset.removeEventListener(`click`, () => {
-      adForm.reset();
+      window.init.deactivateSite();
     });
   };
   const enableInputs = () => {
-    for (let i = 0; i < adInputs.length; i++) {
-      adInputs[i].disabled = false;
+    for (let i = 0; i < adFieldsets.length; i++) {
+      adFieldsets[i].disabled = false;
     }
   };
   const disableInputs = () => {
-    for (let i = 0; i < adInputs.length; i++) {
-      adInputs[i].disabled = true;
+    for (let i = 0; i < adFieldsets.length; i++) {
+      adFieldsets[i].disabled = true;
     }
   };
   // запись координат пина в адрес формы
@@ -52,10 +58,19 @@
       adTitle.setCustomValidity(`Минимальная длина - 30 символов. Осталось ${(MIN_TITLE_LENGTH - adTitleLength)}`);
     } else {
       adTitle.setCustomValidity(``);
+      adTitle.style.outline = `none`;
     }
     adTitle.reportValidity();
   });
-
+  price.addEventListener(`input`, () => {
+    if (parseInt(price.value, 10) < parseInt(price.min, 10)) {
+      price.setCustomValidity(`Минимальная цена - ${price.min}Р.`);
+    } else {
+      price.setCustomValidity(``);
+      price.style.outline = `none`;
+    }
+    price.reportValidity();
+  });
   adForm.addEventListener(`change`, () => {
     const guestN = (N) => {
       return roomCapacity.querySelector(`[value="${N}"]`);
@@ -102,6 +117,7 @@
     const timeout = (N) => {
       return timeOut.querySelector(`[value="${N}:00"]`);
     };
+
     if (timeIn.value === `12:00`) {
       timeout(12).selected = true;
       timeout(12).disabled = false;
@@ -129,6 +145,19 @@
   };
 
   adForm.addEventListener(`submit`, formSubmitHandler);
+
+  const formSubmitBtn = adForm.querySelector(`button[type="submit"]`);
+
+  formSubmitBtn.addEventListener(`click`, () => {
+    const inputs = adForm.querySelectorAll(`input`);
+    for (let input of inputs) {
+      if (input.checkValidity() === false) {
+        input.style.outline = `red solid 2px`;
+      } else {
+        input.style.outline = `none`;
+      }
+    }
+  });
 
   window.form = {
     enableForm,

@@ -10,14 +10,13 @@
     map.classList.add(`map--faded`);
   };
   // рендер пинов из загруженных из сервера данных
-  // let pinsData = [];
   const onLoad = (pins) => {
     window.pinsData.saveToStore(pins);
-    // pinsData = pins;
     updatePins(pins);
   };
 
   const updatePins = (pins) => {
+    window.pin.removePins();
     window.pin.renderPins(pins);
 
     const renderedPins = pinsWrapper.querySelectorAll(`button[data-pin-id]`);
@@ -25,7 +24,8 @@
     for (let renderedPin of renderedPins) {
       const onPinClickHandler = (evt) => {
         window.card.removeCard();
-        // window.removeCard();
+        window.pin.removeActivePin();
+        renderedPin.classList.add(`map__pin--active`);
 
         const pinId = evt.target.getAttribute(`data-pin-id`);
         const filtersContainer = map.querySelector(`.map__filters-container`);
@@ -35,7 +35,6 @@
       };
       renderedPin.addEventListener(`click`, onPinClickHandler);
     }
-
   };
 
   window.map = {

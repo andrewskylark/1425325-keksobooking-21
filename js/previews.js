@@ -5,6 +5,7 @@
   const avatarFileChooser = document.querySelector(`.ad-form__field input[type=file]`);
   const avatarPreview = document.querySelector(`.ad-form-header__preview img`);
   const photoFileChooser = document.querySelector(`.ad-form__upload input[type=file]`);
+  const photoPreviewContainer = document.querySelector(`.ad-form__photo`);
 
   const previewUploadHandler = (fileName, file, preview) => {
     const matches = FILE_TYPES.some((that) => {
@@ -30,7 +31,6 @@
   photoFileChooser.addEventListener(`change`, () => {
     const file = photoFileChooser.files[0];
     const fileName = file.name.toLowerCase();
-    const photoPreviewContainer = document.querySelector(`.ad-form__photo`);
     // очищает содержимое дива
     photoPreviewContainer.innerHTML = ``;
 
@@ -44,4 +44,13 @@
 
     previewUploadHandler(fileName, file, photoPreview);
   });
+
+  const clearPreviews = () => {
+    photoPreviewContainer.innerHTML = ``;
+    avatarPreview.setAttribute(`src`, `img/muffin-grey.svg`);
+  };
+
+  window.previews = {
+    clearPreviews
+  };
 })();
