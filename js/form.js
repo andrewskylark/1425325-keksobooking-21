@@ -7,7 +7,12 @@
   // активация/деактивация формы и инпутов
   const enableForm = () => {
     adForm.classList.remove(`ad-form--disabled`);
+
+    for (let option of roomCapacity.options) {
+      option.disabled = true;
+    }
     roomCapacity.querySelector(`[value="1"]`).selected = true;
+    roomCapacity.querySelector(`[value="1"]`).disabled = false;
     roomType.querySelector(`[value="house"]`).selected = true;
 
     adFormBtnReset.addEventListener(`click`, () => {
@@ -51,6 +56,35 @@
   const timeIn = adForm.querySelector(`#timein`);
   const adTitle = adForm.querySelector(`#title`);
 
+  const syncCheckinTimes = () => {
+    timeOut.value = timeIn.value;
+  };
+  const roomsSincGuest = (rooms, guests) => {
+    let optionsMapping = {
+      1: [1],
+      2: [1, 2],
+      3: [1, 2, 3],
+      100: [0]
+    };
+    return function () {
+      let value = +rooms.value;
+      let options = guests.options;
+      let availableOptions = optionsMapping[value];
+
+      for (let i = 0; i < options.length; i++) {
+        if (availableOptions.indexOf(+options[i].value) !== -1) {
+          options[i].disabled = false;
+          if (+options[i].value === value || availableOptions.length === 1) {
+            options[i].selected = true;
+          }
+        } else {
+          options[i].disabled = true;
+        }
+      }
+    };
+  };
+
+  roomsNumber.addEventListener(`change`, roomsSincGuest(roomsNumber, roomCapacity));
   adTitle.addEventListener(`input`, () => {
     const adTitleLength = adTitle.value.length;
 
@@ -64,7 +98,7 @@
   });
   price.addEventListener(`input`, () => {
     if (parseInt(price.value, 10) < parseInt(price.min, 10)) {
-      price.setCustomValidity(`Минимальная цена - ${price.min}Р.`);
+      price.setCustomValidity(`Минимальная цена: ${price.min}Р.`);
     } else {
       price.setCustomValidity(``);
       price.style.outline = `none`;
@@ -72,33 +106,6 @@
     price.reportValidity();
   });
   adForm.addEventListener(`change`, () => {
-    const guestN = (N) => {
-      return roomCapacity.querySelector(`[value="${N}"]`);
-    };
-    if (roomsNumber.value === `1`) {
-      guestN(1).selected = true;
-      guestN(0).disabled = true;
-      guestN(2).disabled = true;
-      guestN(3).disabled = true;
-    }
-    if (roomsNumber.value === `2`) {
-      guestN(2).selected = true;
-      guestN(2).disabled = false;
-      guestN(3).disabled = true;
-      guestN(0).disabled = true;
-    } else if (roomsNumber.value === `3`) {
-      guestN(3).selected = true;
-      guestN(3).disabled = false;
-      guestN(2).disabled = false;
-      guestN(1).disabled = false;
-      guestN(0).disabled = true;
-    } else if (roomsNumber.value === `100`) {
-      guestN(0).selected = true;
-      guestN(0).disabled = false;
-      guestN(1).disabled = true;
-      guestN(2).disabled = true;
-      guestN(3).disabled = true;
-    }
 
     if (roomType.value === `bungalow`) {
       price.placeholder = `0`;
@@ -114,26 +121,7 @@
       price.min = `10000`;
     }
 
-    const timeout = (N) => {
-      return timeOut.querySelector(`[value="${N}:00"]`);
-    };
-
-    if (timeIn.value === `12:00`) {
-      timeout(12).selected = true;
-      timeout(12).disabled = false;
-      timeout(13).disabled = true;
-      timeout(14).disabled = true;
-    } else if (timeIn.value === `13:00`) {
-      timeout(13).selected = true;
-      timeout(13).disabled = false;
-      timeout(12).disabled = true;
-      timeout(14).disabled = true;
-    } else if (timeIn.value === `14:00`) {
-      timeout(14).selected = true;
-      timeout(14).disabled = false;
-      timeout(12).disabled = true;
-      timeout(13).disabled = true;
-    }
+    syncCheckinTimes();
   });
 
   const formSubmitHandler = (evt) => {

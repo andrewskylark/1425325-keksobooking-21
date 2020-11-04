@@ -2,6 +2,9 @@
 (() => {
   const URL_DOWN = `https://21.javascript.pages.academy/keksobooking/data`;
   const URL_UP = `https://21.javascript.pages.academy/keksobooking`;
+  const STATUS = {
+    OK: 200
+  };
 
   const download = (onLoad, onError) => {
     const xhr = new XMLHttpRequest();
@@ -9,7 +12,7 @@
     xhr.open(`GET`, URL_DOWN);
 
     xhr.addEventListener(`load`, () => {
-      if (xhr.status === 200) {
+      if (xhr.status === STATUS.OK) {
         onLoad(xhr.response);
         window.filters.enableFilters();
       } else {
@@ -51,7 +54,7 @@
     xhr.open(`POST`, URL_UP);
 
     xhr.addEventListener(`load`, () => {
-      if (xhr.status === 200) {
+      if (xhr.status === STATUS.OK) {
         onSuccess(xhr.response);
       } else {
         onUpError();
