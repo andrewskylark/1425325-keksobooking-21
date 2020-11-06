@@ -1,12 +1,13 @@
 'use strict';
 (() => {
   const map = document.querySelector(`.map`);
+  const filtersContainer = map.querySelector(`.map__filters-container`);
   const pinsWrapper = document.querySelector(`.map__pins`);
 
-  const showMap = function () {
+  const show = function () {
     map.classList.remove(`map--faded`);
   };
-  const hideMap = function () {
+  const hide = function () {
     map.classList.add(`map--faded`);
   };
   // рендер пинов из загруженных из сервера данных
@@ -16,30 +17,29 @@
   };
 
   const updatePins = (pins) => {
-    window.pin.removePins();
-    window.pin.renderPins(pins);
+    window.pin.remove();
+    window.pin.render(pins);
 
     const renderedPins = pinsWrapper.querySelectorAll(`button[data-pin-id]`);
 
     for (let renderedPin of renderedPins) {
-      const onPinClickHandler = (evt) => {
-        window.card.removeCard();
-        window.pin.removeActivePin();
+      const onPinClick = (evt) => {
+        window.card.remove();
+        window.pin.removeActive();
         renderedPin.classList.add(`map__pin--active`);
 
         const pinId = evt.target.getAttribute(`data-pin-id`);
-        const filtersContainer = map.querySelector(`.map__filters-container`);
 
-        map.insertBefore(window.card.generateCard(pins[pinId]), filtersContainer);
+        map.insertBefore(window.card.generate(pins[pinId]), filtersContainer);
 
       };
-      renderedPin.addEventListener(`click`, onPinClickHandler);
+      renderedPin.addEventListener(`click`, onPinClick);
     }
   };
 
   window.map = {
-    showMap,
-    hideMap,
+    show,
+    hide,
     onLoad,
     updatePins
   };
