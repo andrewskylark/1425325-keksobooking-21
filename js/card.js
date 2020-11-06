@@ -20,7 +20,6 @@
 
     if (pinData.offer.photos.length > 0) {
       cardTemplate.appendChild(photosWrapper);
-      console.log(photosWrapper.children);
       photosWrapper.innerHtml = ``;
 
       for (let i = 0; i < pinData.offer.photos.length; i++) {
