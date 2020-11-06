@@ -10,7 +10,7 @@
   const selectPrice = mapFilters.querySelector(`#housing-price`);
   const selectFeatures = mapFilters.querySelector(`#housing-features`);
 
-  const disableFilters = () => {
+  const disable = () => {
     for (let filterSelect of filterSelects) {
       filterSelect.disabled = true;
     }
@@ -19,7 +19,7 @@
     mapFilters.style.opacity = 0;
     mapFilters.reset();
   };
-  const enableFilters = () => {
+  const enable = () => {
     for (let filterSelect of filterSelects) {
       filterSelect.disabled = false;
     }
@@ -29,7 +29,7 @@
   };
 
   mapFilters.addEventListener(`change`, window.debounce(() => {
-    window.card.removeCard();
+    window.card.remove();
 
     const housingTypePins = window.pinsData.store.filter((pin) => {
 
@@ -91,7 +91,7 @@
   }));
 
   window.filters = {
-    enableFilters,
-    disableFilters
+    enable,
+    disable
   };
 })();

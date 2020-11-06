@@ -2,6 +2,5 @@
 const pinsWrapper = document.querySelector(`.map__pins`);
 const pinMain = pinsWrapper.querySelector(`.map__pin--main`);
 
-window.form.disableInputs();
-window.filters.disableFilters();
-window.form.fillFormAddress(pinMain, window.consts.PIN_MAIN.x, window.consts.PIN_MAIN.x);
+window.init.deactivate();
+window.form.fillAddress(pinMain, window.consts.PinMain.x, window.consts.PinMain.x);

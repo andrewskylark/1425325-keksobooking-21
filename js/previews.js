@@ -7,7 +7,7 @@
   const photoFileChooser = document.querySelector(`.ad-form__upload input[type=file]`);
   const photoPreviewContainer = document.querySelector(`.ad-form__photo`);
 
-  const previewUploadHandler = (fileName, file, preview) => {
+  const onPreviewUpload = (fileName, file, preview) => {
     const matches = FILE_TYPES.some((that) => {
       return fileName.endsWith(that);
     });
@@ -26,7 +26,7 @@
     const file = avatarFileChooser.files[0];
     const fileName = file.name.toLowerCase();
 
-    previewUploadHandler(fileName, file, avatarPreview);
+    onPreviewUpload(fileName, file, avatarPreview);
   });
   photoFileChooser.addEventListener(`change`, () => {
     const file = photoFileChooser.files[0];
@@ -42,15 +42,15 @@
     photoPreview.setAttribute(`height`, `100%`);
     photoPreviewContainer.appendChild(photoPreview);
 
-    previewUploadHandler(fileName, file, photoPreview);
+    onPreviewUpload(fileName, file, photoPreview);
   });
 
-  const clearPreviews = () => {
+  const clear = () => {
     photoPreviewContainer.innerHTML = ``;
     avatarPreview.setAttribute(`src`, `img/muffin-grey.svg`);
   };
 
   window.previews = {
-    clearPreviews
+    clear
   };
 })();

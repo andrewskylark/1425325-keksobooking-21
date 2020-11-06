@@ -1,14 +1,14 @@
 'use strict';
 (() => {
   const MAX_PINS_COUNT = 5;
-  const PIN = {
+  const Pin = {
     x: 50,
     y: 70
   };
   const fragment = document.createDocumentFragment();
   const pinsWrapper = document.querySelector(`.map__pins`);
   // рендеринг пина из шаблона
-  const generatePin = (pinData, j) => {
+  const generate = (pinData, j) => {
     const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`).cloneNode(true);
     const avatar = pinTemplate.querySelector(`img`);
 
@@ -16,25 +16,25 @@
     avatar.src = pinData.author.avatar;
     avatar.alt = pinData.offer.title;
     pinTemplate.setAttribute(`data-pin-id`, j);
-    pinTemplate.style.left = `${pinData.location.x - (PIN.x / 2)}px`;
-    pinTemplate.style.top = `${pinData.location.y - PIN.y}px`;
+    pinTemplate.style.left = `${pinData.location.x - (Pin.x / 2)}px`;
+    pinTemplate.style.top = `${pinData.location.y - Pin.y}px`;
 
     return pinTemplate;
   };
-  const renderPins = (pins) => {
+  const render = (pins) => {
     for (let i = 0; (i < pins.length) && (i < MAX_PINS_COUNT); i++) {
-      fragment.append(window.pin.generatePin(pins[i], i));
+      fragment.append(window.pin.generate(pins[i], i));
     }
     pinsWrapper.append(fragment);
   };
-  const removePins = () => {
+  const remove = () => {
     const pins = pinsWrapper.querySelectorAll(`button[data-pin-id]`);
 
     for (let pin of pins) {
       pin.remove();
     }
   };
-  const removeActivePin = () => {
+  const removeActive = () => {
     const activePin = document.querySelector(`.map__pin--active`);
 
     if (activePin) {
@@ -43,9 +43,9 @@
   };
 
   window.pin = {
-    generatePin,
-    renderPins,
-    removePins,
-    removeActivePin
+    generate,
+    render,
+    remove,
+    removeActive
   };
 })();

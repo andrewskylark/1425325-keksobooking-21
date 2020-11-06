@@ -4,8 +4,17 @@
   const adForm = document.querySelector(`.ad-form`);
   const adFieldsets = adForm.querySelectorAll(`fieldset`);
   const adFormBtnReset = adForm.querySelector(`button[type="reset"]`);
+  const inputs = adForm.querySelectorAll(`input`);
+  const addressInput = document.querySelector(`#address`);
+
+  const PriceThresholds = {
+    NONE: 0,
+    LOW: 1000,
+    MIDDLE: 5000,
+    HIGH: 10000
+  };
   // активация/деактивация формы и инпутов
-  const enableForm = () => {
+  const enable = () => {
     adForm.classList.remove(`ad-form--disabled`);
 
     for (let option of roomCapacity.options) {
@@ -15,35 +24,29 @@
     roomCapacity.querySelector(`[value="1"]`).disabled = false;
     roomType.querySelector(`[value="house"]`).selected = true;
 
-    adFormBtnReset.addEventListener(`click`, () => {
-      window.init.deactivateSite();
+    for (let i = 0; i < adFieldsets.length; i++) {
+      adFieldsets[i].disabled = false;
+    }
 
-      const inputs = adForm.querySelectorAll(`input`);
+    adFormBtnReset.addEventListener(`click`, () => {
+      window.init.deactivate();
 
       for (let input of inputs) {
         input.style.outline = `none`;
       }
     });
   };
-  const disableForm = () => {
+  const disable = () => {
     adForm.classList.add(`ad-form--disabled`);
-    adFormBtnReset.removeEventListener(`click`, () => {
-      window.init.deactivateSite();
-    });
-  };
-  const enableInputs = () => {
-    for (let i = 0; i < adFieldsets.length; i++) {
-      adFieldsets[i].disabled = false;
-    }
-  };
-  const disableInputs = () => {
     for (let i = 0; i < adFieldsets.length; i++) {
       adFieldsets[i].disabled = true;
     }
+    adFormBtnReset.removeEventListener(`click`, () => {
+      window.init.deactivate();
+    });
   };
   // запись координат пина в адрес формы
-  const fillFormAddress = (elem, pinX, pinY) => {
-    const addressInput = document.querySelector(`#address`);
+  const fillAddress = (elem, pinX, pinY) => {
     const {x, y} = window.utils.getCoords(elem);
     addressInput.setAttribute(`value`, window.utils.addressToString(Math.floor(x + pinX / 2), Math.floor(y + pinY)));
   };
@@ -66,7 +69,7 @@
       3: [1, 2, 3],
       100: [0]
     };
-    return function () {
+    return () => {
       let value = +rooms.value;
       let options = guests.options;
       let availableOptions = optionsMapping[value];
@@ -108,36 +111,36 @@
   adForm.addEventListener(`change`, () => {
 
     if (roomType.value === `bungalow`) {
-      price.placeholder = `0`;
-      price.min = `0`;
+      price.placeholder = PriceThresholds.NONE;
+      price.min = PriceThresholds.NONE;
     } else if (roomType.value === `flat`) {
-      price.placeholder = `1000`;
-      price.min = `1000`;
+      price.placeholder = PriceThresholds.LOW;
+      price.min = PriceThresholds.LOW;
     } else if (roomType.value === `house`) {
-      price.placeholder = `5000`;
-      price.min = `5000`;
+      price.placeholder = PriceThresholds.MIDDLE;
+      price.min = PriceThresholds.MIDDLE;
     } else if (roomType.value === `palace`) {
-      price.placeholder = `10000`;
-      price.min = `10000`;
+      price.placeholder = PriceThresholds.HIGH;
+      price.min = PriceThresholds.HIGH;
     }
 
     syncCheckinTimes();
   });
 
-  const formSubmitHandler = (evt) => {
+  const onFormSubmit = (evt) => {
     evt.preventDefault();
-    window.backend.upload(new FormData(adForm), window.backend.formErrorHandler, () => {
+    window.backend.upload(new FormData(adForm), window.backend.onFormError, () => {
       window.backend.renderSuccessPopup();
-      window.init.deactivateSite();
+      window.init.deactivate();
     });
   };
 
-  adForm.addEventListener(`submit`, formSubmitHandler);
+  adForm.addEventListener(`submit`, onFormSubmit);
 
   const formSubmitBtn = adForm.querySelector(`button[type="submit"]`);
 
   formSubmitBtn.addEventListener(`click`, () => {
-    const inputs = adForm.querySelectorAll(`input`);
+
     for (let input of inputs) {
       if (input.checkValidity() === false) {
         input.style.outline = `red solid 2px`;
@@ -148,10 +151,8 @@
   });
 
   window.form = {
-    enableForm,
-    enableInputs,
-    disableForm,
-    disableInputs,
-    fillFormAddress
+    enable,
+    disable,
+    fillAddress
   };
 })();

@@ -2,9 +2,12 @@
 (() => {
   const URL_DOWN = `https://21.javascript.pages.academy/keksobooking/data`;
   const URL_UP = `https://21.javascript.pages.academy/keksobooking`;
-  const STATUS = {
+  const StatusCode = {
     OK: 200
   };
+  const successPopup = document.querySelector(`#success`).content.querySelector(`.success`).cloneNode(true);
+  const errorPopup = document.querySelector(`#error`).content.querySelector(`.error`).cloneNode(true);
+  const closeBtn = errorPopup.querySelector(`.error__button`);
 
   const download = (onLoad, onError) => {
     const xhr = new XMLHttpRequest();
@@ -12,9 +15,9 @@
     xhr.open(`GET`, URL_DOWN);
 
     xhr.addEventListener(`load`, () => {
-      if (xhr.status === STATUS.OK) {
+      if (xhr.status === StatusCode.OK) {
         onLoad(xhr.response);
-        window.filters.enableFilters();
+        window.filters.enable();
       } else {
         onError(`Ошибка загрузки данных`);
       }
@@ -54,7 +57,7 @@
     xhr.open(`POST`, URL_UP);
 
     xhr.addEventListener(`load`, () => {
-      if (xhr.status === STATUS.OK) {
+      if (xhr.status === StatusCode.OK) {
         onSuccess(xhr.response);
       } else {
         onUpError();
@@ -68,7 +71,6 @@
   };
 
   const renderSuccessPopup = () => {
-    const successPopup = document.querySelector(`#success`).content.querySelector(`.success`).cloneNode(true);
     document.body.insertAdjacentElement(`afterbegin`, successPopup);
 
     const closeSuccess = () => {
@@ -77,16 +79,14 @@
       document.removeEventListener(`keydown`, onPopupEscPress);
     };
     const onPopupEscPress = (evt) => {
-      window.utils.isEscEvt(evt, closeSuccess());
+      window.utils.isEscEvt(evt, closeSuccess);
     };
 
     document.addEventListener(`keydown`, onPopupEscPress);
     window.addEventListener(`click`, closeSuccess);
   };
 
-  const formErrorHandler = () => {
-    const errorPopup = document.querySelector(`#error`).content.querySelector(`.error`).cloneNode(true);
-    const closeBtn = errorPopup.querySelector(`.error__button`);
+  const onFormError = () => {
 
     document.querySelector(`main`).insertAdjacentElement(`afterbegin`, errorPopup);
 
@@ -109,6 +109,6 @@
     upload,
     onError,
     renderSuccessPopup,
-    formErrorHandler
+    onFormError
   };
 })();

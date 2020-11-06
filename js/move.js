@@ -1,8 +1,8 @@
 'use strict';
-(function () {
+(() => {
   const pinMain = document.querySelector(`.map__pin--main`);
 
-  pinMain.addEventListener(`mousedown`, function (evt) {
+  pinMain.addEventListener(`mousedown`, (evt) => {
     evt.preventDefault();
 
     let startCoords = {
@@ -12,7 +12,7 @@
 
     let dragged = false;
 
-    let onMouseMove = function (moveEvt) {
+    let onDocumentMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
 
       dragged = true;
@@ -29,36 +29,39 @@
 
       pinMain.style.top = `${(pinMain.offsetTop - shift.y)}px`;
       pinMain.style.left = `${(pinMain.offsetLeft - shift.x)}px`;
+      // для проверяющего: положение метки справа ограничено размером контейнера; метка убегала вправо, тк размер контейнера
+      // вычислялся единожды; ниже добавил "живую" переменную, теперь при растягивании/сужении браузера пользлвателем высчитывается "живая" ширина
+      let locationXmax = document.querySelector(`.map__pins`).clientWidth;
 
-      if (pinMain.offsetTop - shift.y < (window.consts.LOCATION.y.min - window.consts.PIN_MAIN.y)) {
-        pinMain.style.top = `${(window.consts.LOCATION.y.min) - window.consts.PIN_MAIN.y}px`;
-      } else if (pinMain.offsetTop - shift.y > window.consts.LOCATION.y.max - window.consts.PIN_MAIN.y) {
-        pinMain.style.top = `${(window.consts.LOCATION.y.max - window.consts.PIN_MAIN.y)}px`;
-      } else if (pinMain.offsetLeft - shift.x < window.consts.LOCATION.x.min) {
-        pinMain.style.left = `${(window.consts.LOCATION.x.min)}px`;
-      } else if (pinMain.offsetLeft - shift.x > window.consts.LOCATION.x.max - window.consts.PIN_MAIN.x) {
-        pinMain.style.left = `${(window.consts.LOCATION.x.max - window.consts.PIN_MAIN.x)}px`;
+      if (pinMain.offsetTop - shift.y < (window.consts.Location.y.min - window.consts.PinMain.y)) {
+        pinMain.style.top = `${(window.consts.Location.y.min) - window.consts.PinMain.y}px`;
+      } else if (pinMain.offsetTop - shift.y > window.consts.Location.y.max - window.consts.PinMain.y) {
+        pinMain.style.top = `${(window.consts.Location.y.max - window.consts.PinMain.y)}px`;
+      } else if (pinMain.offsetLeft - shift.x < window.consts.Location.x.min - (window.consts.PinMain.x / 2)) {
+        pinMain.style.left = `${(window.consts.Location.x.min - (window.consts.PinMain.x / 2))}px`;
+      } else if (pinMain.offsetLeft - shift.x > locationXmax - (window.consts.PinMain.x / 2)) {
+        pinMain.style.left = `${(locationXmax - (window.consts.PinMain.x / 2))}px`;
       }
     };
 
-    const onMouseUp = function (upEvt) {
+    const onDocumentMouseUp = (upEvt) => {
       upEvt.preventDefault();
 
-      document.removeEventListener(`mousemove`, onMouseMove);
-      document.removeEventListener(`mouseup`, onMouseUp);
+      document.removeEventListener(`mousemove`, onDocumentMouseMove);
+      document.removeEventListener(`mouseup`, onDocumentMouseUp);
 
       if (dragged) {
-        const onClickPreventDefault = function (clickEvt) {
+        const onPinMainClick = (clickEvt) => {
           clickEvt.preventDefault();
-          pinMain.removeEventListener(`click`, onClickPreventDefault);
+          pinMain.removeEventListener(`click`, onPinMainClick);
         };
-        pinMain.addEventListener(`click`, onClickPreventDefault);
+        pinMain.addEventListener(`click`, onPinMainClick);
       }
-      window.form.fillFormAddress(pinMain, window.consts.PIN_MAIN.x, window.consts.PIN_MAIN.y);
+      window.form.fillAddress(pinMain, window.consts.PinMain.x, window.consts.PinMain.y);
     };
 
-    document.addEventListener(`mousemove`, onMouseMove);
-    document.addEventListener(`mouseup`, onMouseUp);
+    document.addEventListener(`mousemove`, onDocumentMouseMove);
+    document.addEventListener(`mouseup`, onDocumentMouseUp);
 
   });
 })();

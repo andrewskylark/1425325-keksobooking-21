@@ -5,37 +5,35 @@
   const mapFilters = document.querySelector(`.map__filters`);
 
   const onPinMainMouseButton = (evt) => {
-    if (typeof evt === `object` && evt.button === 0) {
-      activateSite();
+    if (evt.button === 0) {
+      activate();
     }
   };
   const onPinMainEnterPress = (evt) => {
-    window.utils.isEnterEvt(evt, activateSite);
+    window.utils.isEnterEvt(evt, activate);
     delete evt.keyCode;
   };
-  const activateSite = () => {
-    window.map.showMap();
-    window.filters.disableFilters();
-    window.form.enableInputs();
-    window.form.enableForm();
+  const activate = () => {
+    window.map.show();
+    window.filters.enable();
+    window.form.enable();
     window.backend.download(window.map.onLoad, window.backend.onError);
-    window.form.fillFormAddress(pinMain, window.consts.PIN_MAIN.x, window.consts.PIN_MAIN.y);
+    window.form.fillAddress(pinMain, window.consts.PinMain.x, window.consts.PinMain.y);
     pinMain.removeEventListener(`keydown`, onPinMainEnterPress);
     pinMain.removeEventListener(`mousedown`, onPinMainMouseButton);
   };
-  const deactivateSite = () => {
-    window.pin.removePins();
-    window.card.removeCard();
-    window.map.hideMap();
-    window.form.disableInputs();
-    window.form.disableForm();
-    window.filters.disableFilters();
-    pinMain.style.left = `${window.consts.PIN_MAIN_DEFAULT.x}px`;
-    pinMain.style.top = `${window.consts.PIN_MAIN_DEFAULT.y}px`;
-    window.form.fillFormAddress(pinMain, window.consts.PIN_MAIN.x, window.consts.PIN_MAIN.x);
+  const deactivate = () => {
+    window.pin.remove();
+    window.card.remove();
+    window.map.hide();
+    window.form.disable();
+    window.filters.disable();
+    pinMain.style.left = `${window.consts.PinMainDefault.x}px`;
+    pinMain.style.top = `${window.consts.PinMainDefault.y}px`;
+    window.form.fillAddress(pinMain, window.consts.PinMain.x, window.consts.PinMain.x);
     adForm.reset();
     mapFilters.reset();
-    window.previews.clearPreviews();
+    window.previews.clear();
     pinMain.addEventListener(`mousedown`, onPinMainMouseButton);
     pinMain.addEventListener(`keydown`, onPinMainEnterPress);
   };
@@ -44,6 +42,6 @@
   pinMain.addEventListener(`keydown`, onPinMainEnterPress);
 
   window.init = {
-    deactivateSite
+    deactivate
   };
 })();

@@ -1,27 +1,27 @@
 'use strict';
 (() => {
-  const map = document.querySelector(`.map`);
-  const LOCATION = {
+  const mapPins = document.querySelector(`.map__pins`);
+  const Location = {
     x: {
-      min: 0,
-      max: map.getBoundingClientRect().right
+      min: mapPins.getBoundingClientRect().left,
+      max: mapPins.getBoundingClientRect().right
     },
     y: {
       min: 130,
       max: 630
     }
   };
-  const PIN_MAIN = {
+  const PinMain = {
     x: 65,
     y: 87
   };
-  const PIN_MAIN_DEFAULT = {
+  const PinMainDefault = {
     x: 570,
     y: 375
   };
   window.consts = {
-    LOCATION,
-    PIN_MAIN,
-    PIN_MAIN_DEFAULT
+    Location,
+    PinMain,
+    PinMainDefault
   };
 })();
