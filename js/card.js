@@ -4,10 +4,11 @@
   const cardTemplate = document.querySelector(`#card`).content.querySelector(`.popup`).cloneNode(true);
   const avatar = cardTemplate.querySelector(`img`);
   const featuresContainer = cardTemplate.querySelector(`.popup__features`);
-  const features = featuresContainer.querySelectorAll(`.popup__feature`);
+  const feature = featuresContainer.querySelector(`.popup__feature`);
   const btnClose = cardTemplate.querySelector(`.popup__close`);
   const photosWrapper = cardTemplate.querySelector(`.popup__photos`);
   const photo = photosWrapper.querySelector(`.popup__photo`);
+
   photosWrapper.removeChild(photo);
   // словарь типа жилья, стр 32
   const roomTypeMap = {
@@ -16,23 +17,37 @@
     bungalow: `бунгало`,
     palace: `дворец`
   };
-  const pics = (pinData) => {
+
+  const renderPics = (pinData) => {
+    photosWrapper.innerHTML = ``;
+    photosWrapper.remove();
 
     if (pinData.offer.photos.length > 0) {
+
       cardTemplate.appendChild(photosWrapper);
-      photosWrapper.innerHtml = ``;
 
-      for (let i = 0; i < pinData.offer.photos.length; i++) {
-
-        fragment.appendChild(photo.cloneNode(true)).src = pinData.offer.photos[i];
-      }
+      pinData.offer.photos.forEach((el) => {
+        fragment.appendChild(photo.cloneNode(true)).src = el;
+      });
       photosWrapper.appendChild(fragment);
-    } else {
-      photosWrapper.remove();
+    }
+  };
+  const renderFeatures = (pinData) => {
+    featuresContainer.remove();
+    featuresContainer.innerHTML = ``;
+
+    if (pinData.offer.features.length > 0) {
+      cardTemplate.insertBefore(featuresContainer, cardTemplate.querySelector(`.popup__description`));
+
+      pinData.offer.features.forEach((el) => {
+        let newFeature = feature.cloneNode(true);
+        newFeature.className = newFeature.className.replace(`wifi`, el);
+        fragment.appendChild(newFeature);
+      });
+      featuresContainer.appendChild(fragment);
     }
   };
   const generate = (pinData) => {
-    const pinsClasses = pinData.offer.features;
 
     avatar.src = pinData.author.avatar;
     cardTemplate.querySelector(`.popup__title`).textContent = pinData.offer.title;
@@ -43,31 +58,22 @@
     cardTemplate.querySelector(`.popup__text--time`).textContent = `Заезд после ${pinData.offer.checkin}, выезд до ${pinData.offer.checkout}`;
     cardTemplate.querySelector(`.popup__description`).textContent = pinData.offer.description;
 
-    pics(pinData);
-    // photosWrapper.removeChild(photo);
-    // photosWrapper.innerHtml = ``;
-    // if (pinData.offer.photos.length === 0) {
-    //   photosWrapper.remove();
-    // } else {
-    //   for (let i = 0; i < pinData.offer.photos.length; i++) {
-    //     fragment.appendChild(photo.cloneNode(true)).src = pinData.offer.photos[i];
+    renderPics(pinData);
+    renderFeatures(pinData);
+    // for (let i = 0; i < features.length; i++) {
+
+    //   if (pinData.offer.features.length === 0) {
+    //     // featuresContainer.remove();
+    //   } else {
+    //     let feature = features[i];
+    //     const pinClassName = feature.className.replace(`popup__feature popup__feature--`, ``);
+
+    //     if (pinsClasses.includes(pinClassName) === false) {
+    //       feature.remove();
+    //     }
     //   }
-    //   photosWrapper.appendChild(fragment);
     // }
 
-    for (let i = 0; i < features.length; i++) {
-
-      if (pinData.offer.features.length === 0) {
-        featuresContainer.remove();
-      } else {
-        let feature = features[i];
-        const pinClassName = feature.className.replace(`popup__feature popup__feature--`, ``);
-
-        if (pinsClasses.includes(pinClassName) === false) {
-          feature.remove();
-        }
-      }
-    }
     const onBtnCloseClick = () => {
       window.removeCard();
     };

@@ -20,27 +20,29 @@
     for (let option of roomCapacity.options) {
       option.disabled = true;
     }
+
     roomCapacity.querySelector(`[value="1"]`).selected = true;
     roomCapacity.querySelector(`[value="1"]`).disabled = false;
     roomType.querySelector(`[value="house"]`).selected = true;
 
-    for (let i = 0; i < adFieldsets.length; i++) {
-      adFieldsets[i].disabled = false;
-    }
+    adFieldsets.forEach((el) => {
+      el.disabled = false;
+    });
 
     adFormBtnReset.addEventListener(`click`, () => {
       window.init.deactivate();
 
-      for (let input of inputs) {
-        input.style.outline = `none`;
-      }
+      inputs.forEach((el) => {
+        el.style.outline = `none`;
+      });
     });
   };
   const disable = () => {
     adForm.classList.add(`ad-form--disabled`);
-    for (let i = 0; i < adFieldsets.length; i++) {
-      adFieldsets[i].disabled = true;
-    }
+
+    adFieldsets.forEach((el) => {
+      el.disabled = true;
+    });
     adFormBtnReset.removeEventListener(`click`, () => {
       window.init.deactivate();
     });
@@ -63,16 +65,16 @@
     timeOut.value = timeIn.value;
   };
   const roomsSincGuest = (rooms, guests) => {
-    let optionsMapping = {
+    const optionsMapping = {
       1: [1],
       2: [1, 2],
       3: [1, 2, 3],
       100: [0]
     };
     return () => {
-      let value = +rooms.value;
-      let options = guests.options;
-      let availableOptions = optionsMapping[value];
+      const value = +rooms.value;
+      const options = guests.options;
+      const availableOptions = optionsMapping[value];
 
       for (let i = 0; i < options.length; i++) {
         if (availableOptions.indexOf(+options[i].value) !== -1) {

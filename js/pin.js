@@ -7,9 +7,10 @@
   };
   const fragment = document.createDocumentFragment();
   const pinsWrapper = document.querySelector(`.map__pins`);
+  const template = document.querySelector(`#pin`).content.querySelector(`.map__pin`).cloneNode(true);
   // рендеринг пина из шаблона
   const generate = (pinData, j) => {
-    const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`).cloneNode(true);
+    const pinTemplate = template.cloneNode(true);
     const avatar = pinTemplate.querySelector(`img`);
 
     avatar.setAttribute(`data-pin-id`, j);

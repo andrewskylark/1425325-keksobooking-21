@@ -12,7 +12,7 @@
 
     let dragged = false;
 
-    let onDocumentMouseMove = (moveEvt) => {
+    const onDocumentMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
 
       dragged = true;
@@ -31,7 +31,7 @@
       pinMain.style.left = `${(pinMain.offsetLeft - shift.x)}px`;
       // для проверяющего: положение метки справа ограничено размером контейнера; метка убегала вправо, тк размер контейнера
       // вычислялся единожды; ниже добавил "живую" переменную, теперь при растягивании/сужении браузера пользлвателем высчитывается "живая" ширина
-      let locationXmax = document.querySelector(`.map__pins`).clientWidth;
+      const locationXmax = document.querySelector(`.map__pins`).clientWidth;
 
       if (pinMain.offsetTop - shift.y < (window.consts.Location.y.min - window.consts.PinMain.y)) {
         pinMain.style.top = `${(window.consts.Location.y.min) - window.consts.PinMain.y}px`;

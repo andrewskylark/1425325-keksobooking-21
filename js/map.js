@@ -4,10 +4,10 @@
   const filtersContainer = map.querySelector(`.map__filters-container`);
   const pinsWrapper = document.querySelector(`.map__pins`);
 
-  const show = function () {
+  const show = () => {
     map.classList.remove(`map--faded`);
   };
-  const hide = function () {
+  const hide = () => {
     map.classList.add(`map--faded`);
   };
   // рендер пинов из загруженных из сервера данных

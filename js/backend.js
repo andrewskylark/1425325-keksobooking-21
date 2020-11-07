@@ -9,7 +9,7 @@
   const errorPopup = document.querySelector(`#error`).content.querySelector(`.error`).cloneNode(true);
   const closeBtn = errorPopup.querySelector(`.error__button`);
 
-  const download = (onLoad, onError) => {
+  const download = (onLoad, onDownloadError) => {
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
     xhr.open(`GET`, URL_DOWN);
@@ -19,20 +19,39 @@
         onLoad(xhr.response);
         window.filters.enable();
       } else {
-        onError(`Ошибка загрузки данных`);
+        onDownloadError(`Ошибка загрузки данных`);
       }
     });
     xhr.addEventListener(`error`, () => {
-      onError(`Oшибка соединения`);
+      onDownloadError(`Oшибка соединения`);
     });
     xhr.addEventListener(`timeout`, () => {
-      onError(`Запрос не успел выполниться за` + xhr.timeout + `mc`);
+      onDownloadError(`Запрос не успел выполниться за` + xhr.timeout + `mc`);
     });
 
     xhr.send();
   };
 
-  const onError = (errorMsg) => {
+  const upload = (data, onUploadError, onUploadSuccess) => {
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = `json`;
+    xhr.open(`POST`, URL_UP);
+
+    xhr.addEventListener(`load`, () => {
+      if (xhr.status === StatusCode.OK) {
+        onUploadSuccess(xhr.response);
+      } else {
+        onUploadError();
+      }
+    });
+    xhr.addEventListener(`error`, ()=> {
+      onUploadError();
+    });
+
+    xhr.send(data);
+  };
+
+  const onDownloadError = (errorMsg) => {
     const divError = document.body.querySelector(`div.divError`);
     if (divError) {
       divError.remove();
@@ -51,63 +70,44 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
-  const upload = (data, onUpError, onSuccess) => {
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = `json`;
-    xhr.open(`POST`, URL_UP);
-
-    xhr.addEventListener(`load`, () => {
-      if (xhr.status === StatusCode.OK) {
-        onSuccess(xhr.response);
-      } else {
-        onUpError();
-      }
-    });
-    xhr.addEventListener(`error`, ()=> {
-      onUpError();
-    });
-
-    xhr.send(data);
-  };
-
   const renderSuccessPopup = () => {
     document.body.insertAdjacentElement(`afterbegin`, successPopup);
 
-    const closeSuccess = () => {
+    const onSuccessPopupClose = () => {
       document.querySelector(`.success`).remove();
-      window.removeEventListener(`click`, closeSuccess);
+      window.removeEventListener(`click`, onSuccessPopupClose);
       document.removeEventListener(`keydown`, onPopupEscPress);
     };
     const onPopupEscPress = (evt) => {
-      window.utils.isEscEvt(evt, closeSuccess);
+      window.utils.isEscEvt(evt, onSuccessPopupClose);
     };
 
     document.addEventListener(`keydown`, onPopupEscPress);
-    window.addEventListener(`click`, closeSuccess);
+    window.addEventListener(`click`, onSuccessPopupClose);
   };
 
   const onFormError = () => {
 
     document.querySelector(`main`).insertAdjacentElement(`afterbegin`, errorPopup);
 
-    const closeError = () => {
+    const onErrorPopupClose = () => {
       document.querySelector(`.error`).remove();
-      window.removeEventListener(`click`, closeError);
+      window.removeEventListener(`click`, onErrorPopupClose);
       document.removeEventListener(`keydown`, onPopupEscPress);
-      closeBtn.removeEventListener(`click`, closeError);
+      closeBtn.removeEventListener(`click`, onErrorPopupClose);
     };
     const onPopupEscPress = (evt) => {
-      window.utils.isEscEvt(evt, closeError);
+      window.utils.isEscEvt(evt, onErrorPopupClose);
     };
-    closeBtn.addEventListener(`click`, closeError);
+    closeBtn.addEventListener(`click`, onErrorPopupClose);
     document.addEventListener(`keydown`, onPopupEscPress);
-    window.addEventListener(`click`, closeError);
+    window.addEventListener(`click`, onErrorPopupClose);
   };
 
   window.backend = {
     download,
     upload,
-    onError,
+    onDownloadError,
     renderSuccessPopup,
     onFormError
   };
