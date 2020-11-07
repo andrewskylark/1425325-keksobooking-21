@@ -34,7 +34,7 @@
       return `${x}, ${y}`;
     },
     getCoords: (elem) => {
-      let box = elem.getBoundingClientRect();
+      const box = elem.getBoundingClientRect();
 
       return {
         x: box.left + pageXOffset,
