@@ -53,44 +53,9 @@ const renderPopup = (popup, popupClass) => {
 };
 
 const download = (onDownload, onDownloadError) => {
-  // const xhr = new XMLHttpRequest();
-  // xhr.responseType = `json`;
-  // xhr.open(`GET`, URL_DOWN);
-
-  // xhr.addEventListener(`load`, () => {
-  //   if (xhr.status === StatusCode.OK) {
-  //     onDownload(xhr.response);
-  //     window.filters.enable();
-  //   } else {
-  //     onDownloadError(`Ошибка загрузки данных`);
-  //   }
-  // });
-  // xhr.addEventListener(`error`, () => {
-  //   onDownloadError(`Oшибка соединения`);
-  // });
-  // xhr.addEventListener(`timeout`, () => {
-  //   onDownloadError(`Запрос не успел выполниться за` + xhr.timeout + `mc`);
-  // });
   createNewXhr(`GET`, URL_DOWN, onDownload, onDownloadError);
-  // xhr.send();
 };
 const upload = (data, onUploadError, onUploadSuccess) => {
-  // const xhr = new XMLHttpRequest();
-  // xhr.responseType = `json`;
-  // xhr.open(`POST`, URL_UP);
-
-  // xhr.addEventListener(`load`, () => {
-  //   if (xhr.status === StatusCode.OK) {
-  //     onUploadSuccess(xhr.response);
-  //   } else {
-  //     onUploadError();
-  //   }
-  // });
-  // xhr.addEventListener(`error`, ()=> {
-  //   onUploadError();
-  // });
-
-  // xhr.send(data);
   createNewXhr(`POST`, URL_UP, onUploadSuccess, onUploadError, data);
 };
 const onDownloadError = (errorMsg) => {
