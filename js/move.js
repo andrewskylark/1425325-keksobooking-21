@@ -31,13 +31,14 @@ pinMain.addEventListener(`mousedown`, (evt) => {
     // для проверяющего: положение метки справа ограничено размером контейнера; метка убегала вправо, тк размер контейнера
     // вычислялся единожды; ниже добавил "живую" переменную, теперь при растягивании/сужении браузера пользлвателем высчитывается "живая" ширина
     const locationXmax = document.querySelector(`.map__pins`).clientWidth;
+    const locationXmin = document.querySelector(`.map__pins`).offsetLeft;
 
     if (pinMain.offsetTop - shift.y < (window.consts.PinLocation.y.min - window.consts.PinMain.y)) {
       pinMain.style.top = `${(window.consts.PinLocation.y.min) - window.consts.PinMain.y}px`;
     } else if (pinMain.offsetTop - shift.y > window.consts.PinLocation.y.max - window.consts.PinMain.y) {
       pinMain.style.top = `${(window.consts.PinLocation.y.max - window.consts.PinMain.y)}px`;
-    } else if (pinMain.offsetLeft - shift.x < window.consts.PinLocation.x.min - (window.consts.PinMain.x / 2)) {
-      pinMain.style.left = `${(window.consts.PinLocation.x.min - (window.consts.PinMain.x / 2))}px`;
+    } else if (pinMain.offsetLeft - shift.x < locationXmin - (window.consts.PinMain.x / 2)) {
+      pinMain.style.left = `${(locationXmin - (window.consts.PinMain.x / 2))}px`;
     } else if (pinMain.offsetLeft - shift.x > locationXmax - (window.consts.PinMain.x / 2)) {
       pinMain.style.left = `${(locationXmax - (window.consts.PinMain.x / 2))}px`;
     }
